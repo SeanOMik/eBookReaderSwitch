@@ -1,23 +1,25 @@
 extern "C" {
     #include "menu_book_reader.h"
-    #include "touch_helper.h"
+    //#include "touch_helper.h"
 }
 
 #include "BookReader.hpp"
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
 
-void Menu_OpenBook(char *path)
+void Menu_OpenBook(SDL_Renderer *renderer, SDL_Surface* window_surface, TTF_Font *font, char *path)
 {
-    BookReader *reader = new BookReader(path);
+    BookReader *reader = new BookReader(renderer, path);
     
-    TouchInfo touchInfo;
-    Touch_Init(&touchInfo);
+    /*TouchInfo touchInfo;
+    Touch_Init(&touchInfo);*/
     
     while(appletMainLoop())
     {
-        reader->draw();
+        reader->draw(window_surface, font);
         
         hidScanInput();
-        Touch_Process(&touchInfo);
+        //Touch_Process(&touchInfo);
         u64 kDown = hidKeysDown(CONTROLLER_P1_AUTO);
         u64 kHeld = hidKeysHeld(CONTROLLER_P1_AUTO);
 
@@ -51,13 +53,13 @@ void Menu_OpenBook(char *path)
         if (kHeld & KEY_LSTICK_RIGHT)
             reader->move_page_right();
             
-        if (touchInfo.state == TouchEnded && touchInfo.tapType != TapNone)
+        /*if (touchInfo.state == TouchEnded && touchInfo.tapType != TapNone)
         {
             if (tapped_inside(touchInfo, 0, 0, 120, 720))
                 reader->previous_page();
             else if (tapped_inside(touchInfo, 1160, 0, 1280, 720))
                 reader->next_page();
-        }
+        }*/
     }
 
     delete reader;

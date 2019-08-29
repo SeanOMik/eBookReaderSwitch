@@ -1,108 +1,73 @@
-#include <switch.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <cstdio>
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 
-#include "fs.h"
-#include "common.h"
+//#include "menu_book_reader.h"
 
-#include "menu_book_reader.h"
+int main(int argc, char *argv[]) {
+    SDL_Event event;
+    SDL_Window *window;
+    SDL_Renderer *renderer;
+    int done = 0;
 
-using namespace std;
+    //romfsInit();
 
-static void Term_Services(void) {
-	
-	TTF_CloseFont(Roboto_OSK);
-	TTF_CloseFont(Roboto_small);
-	TTF_CloseFont(Roboto);
-	TTF_CloseFont(Roboto_large);
-	TTF_Quit();
-
-	Mix_CloseAudio();
-	Mix_Quit();
-
-	IMG_Quit();
-
-	SDL_DestroyRenderer(RENDERER);
-	SDL_FreeSurface(WINDOW_SURFACE);
-	SDL_DestroyWindow(WINDOW);
-
-	//#ifdef DEBUG
-	socketExit();
-	//#endif
-
-	timeExit();
-	SDL_Quit();
-	romfsExit();
-}
-
-static void Init_Services(void) {
-	romfsInit();
-	// mandatory at least on switch, else gfx is not properly closed
+    // mandatory at least on switch, else gfx is not properly closed
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK) < 0) {
         SDL_Log("SDL_Init: %s\n", SDL_GetError());
-        Term_Services();
+        return -1;
     }
-	timeInitialize();
 
-	/*#ifdef DEBUG
-	socketInitializeDefault();*/
-	nxlinkStdio();
-	//#endif
-
-	printf("Init Services");
-
-	//SDL_CreateWindowAndRenderer(1280, 720, 0, &WINDOW, &RENDERER);
-
-	WINDOW = SDL_CreateWindow("sdl2_gles2", 0, 0, 1920, 1080, 0);
-    if (!WINDOW) {
+    // create an SDL window (OpenGL ES2 always enabled)
+    // when SDL_FULLSCREEN flag is not set, viewport is automatically handled by SDL (use SDL_SetWindowSize to "change resolution")
+    // available switch SDL2 video modes :
+    // 1920 x 1080 @ 32 bpp (SDL_PIXELFORMAT_RGBA8888)
+    // 1280 x 720 @ 32 bpp (SDL_PIXELFORMAT_RGBA8888)
+    window = SDL_CreateWindow("sdl2_gles2", 0, 0, 1920, 1080, 0);
+    if (!window) {
         SDL_Log("SDL_CreateWindow: %s\n", SDL_GetError());
         SDL_Quit();
-        Term_Services();
+        return -1;
     }
 
-	WINDOW_SURFACE = SDL_GetWindowSurface(WINDOW);
-
-	RENDERER = SDL_CreateRenderer(WINDOW, 0, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-    if (!RENDERER) {
+    // create a renderer (OpenGL ES2)
+    renderer = SDL_CreateRenderer(window, 0, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+    if (!renderer) {
         SDL_Log("SDL_CreateRenderer: %s\n", SDL_GetError());
         SDL_Quit();
-        Term_Services();
+        return -1;
     }
 
-	/*SDL_SetRenderDrawBlendMode(RENDERER, SDL_BLENDMODE_BLEND);
+    /*TTF_Init();
+    TTF_Font *arialUnicode = TTF_OpenFont("RomFs:/arial-unicode-ms.ttf", 30);
+    if (!arialUnicode) {
+        SDL_Quit();
+        return -1;
+    }*/
 
-	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "2");
+    // open CONTROLLER_PLAYER_1 and CONTROLLER_PLAYER_2
+    // when railed, both joycons are mapped to joystick #0,
+    // else joycons are individually mapped to joystick #0, joystick #1, ...
+    // https://github.com/devkitPro/SDL/blob/switch-sdl2/src/joystick/switch/SDL_sysjoystick.c#L45
+    for (int i = 0; i < 2; i++) {
+        if (SDL_JoystickOpen(i) == NULL) {
+            SDL_Log("SDL_JoystickOpen: %s\n", SDL_GetError());
+            SDL_Quit();
+            return -1;
+        }
+    }
 
-	IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG);
+    //Menu_OpenBook("/switch/eBookReader/books/test.epub");
 
-	Mix_Init(MIX_INIT_FLAC | MIX_INIT_MOD | MIX_INIT_MP3 | MIX_INIT_OGG);
-	Mix_OpenAudio(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, 2, 4096);*/
+    SDL_DestroyRenderer(renderer);
+    SDL_DestroyWindow(window);
 
-	TTF_Init();
-	Roboto_large = TTF_OpenFont("romfs:/arial-unicode-ms.tff", 30);
-	Roboto = TTF_OpenFont("romfs:/arial-unicode-ms.tff", 25);
-	Roboto_small = TTF_OpenFont("romfs:/arial-unicode-ms.tff", 20);
-	Roboto_OSK = TTF_OpenFont("romfs:/arial-unicode-ms.tff", 50);
-	if (!Roboto_large || !Roboto || !Roboto_small || !Roboto_OSK)
-		Term_Services();
+    //TTF_CloseFont(arialUnicode);
+    //TTF_Quit();
+    //romfsExit();
+    SDL_Quit();
 
-	FS_RecursiveMakeDir("/switch/eBookReader/");
-    FS_RecursiveMakeDir("/switch/eBookReader/books");
-}
-
-int main(int argc, char **argv) {
-	//Init_Services();
-	printf("AFTER INIT");
-
-	/*if (setjmp(exitJmp)) {
-		Term_Services();
-		return 0;
-	}
-
-	//Menu_OpenBook("/switch/eBookReader/books/test.epub");
-	Term_Services();*/
+    return 0;
 }

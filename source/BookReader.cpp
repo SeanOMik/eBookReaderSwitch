@@ -3,8 +3,8 @@
 
 extern "C" {
 #include "SDL_helper.h"
-#include "status_bar.h"
-#include "common.h"
+//#include "status_bar.h"
+//#include "common.h"
 //#include "config.h"
 }
 
@@ -17,7 +17,8 @@ static inline void FreeTextureIfNeeded(SDL_Texture **texture) {
     }
 }
 
-BookReader::BookReader(const char *path) {
+BookReader::BookReader(SDL_Renderer *renderer, const char *path) {
+    RENDERER = renderer;
     if (ctx == NULL) {
         ctx = fz_new_context(NULL, NULL, 128 << 10);
         fz_register_document_handlers(ctx);
@@ -29,7 +30,7 @@ BookReader::BookReader(const char *path) {
     pages_count = fz_count_pages(ctx, doc);
     
     SDL_Rect viewport;
-    SDL_RenderGetViewport(RENDERER, &viewport);
+    SDL_RenderGetViewport(renderer, &viewport);
     screen_bounds = fz_make_rect(0, 0, viewport.w, viewport.h);
     
     load_page(0);
@@ -78,7 +79,7 @@ void BookReader::reset_page() {
     set_zoom(min_zoom);
 }
 
-void BookReader::draw() {
+void BookReader::draw(SDL_Surface *window_surface, TTF_Font *font) {
     float w = page_bounds.x1 * zoom, h = page_bounds.y1 * zoom;
     
     SDL_Rect rect;
@@ -97,14 +98,14 @@ void BookReader::draw() {
         sprintf(title, "%i/%i, %.2f%%", current_page + 1, pages_count, zoom * 100);
         
         int title_width = 0, title_height = 0;
-        TTF_SizeText(Roboto, title, &title_width, &title_height);
+        TTF_SizeText(font, title, &title_width, &title_height);
         
         SDL_Color color = STATUS_BAR_LIGHT;
         
         SDL_DrawRect(RENDERER, 0, 0, 1280, 40, SDL_MakeColour(color.r, color.g, color.b , 128));
-        SDL_DrawText(Roboto, (screen_bounds.x1 - title_width) / 2, (44 - title_height) / 2, WHITE, title);
+        SDL_DrawText(window_surface, font, (screen_bounds.x1 - title_width) / 2, (44 - title_height) / 2, WHITE, title);
         
-        StatusBar_DisplayTime();
+        //StatusBar_DisplayTime();
     }
     
     SDL_RenderPresent(RENDERER);

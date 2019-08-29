@@ -1,4 +1,3 @@
-#include "common.h"
 #include "SDL_helper.h"
 
 void SDL_ClearScreen(SDL_Renderer *renderer, SDL_Color colour)
@@ -11,8 +10,8 @@ void SDL_DrawRect(SDL_Renderer *renderer, int x, int y, int w, int h, SDL_Color 
 {
 	SDL_Rect rect;
 	rect.x = x; rect.y = y; rect.w = w; rect.h = h;
-	SDL_SetRenderDrawColor(RENDERER, colour.r, colour.g, colour.b, colour.a);
-	SDL_RenderFillRect(RENDERER, &rect);
+	SDL_SetRenderDrawColor(renderer, colour.r, colour.g, colour.b, colour.a);
+	SDL_RenderFillRect(renderer, &rect);
 }
 
 void SDL_DrawCircle(SDL_Renderer *renderer, int x, int y, int r, SDL_Color colour)
@@ -21,22 +20,22 @@ void SDL_DrawCircle(SDL_Renderer *renderer, int x, int y, int r, SDL_Color colou
 	return;
 }
 
-void SDL_DrawText(TTF_Font *font, int x, int y, SDL_Color colour, const char *text)
+void SDL_DrawText(SDL_Surface* window_surface, TTF_Font *font, int x, int y, SDL_Color colour, const char *text)
 {
 	SDL_Surface *surface = TTF_RenderText_Blended_Wrapped(font, text, colour, 1280);
 	SDL_SetSurfaceAlphaMod(surface, colour.a);
 	SDL_Rect position = {x, y, surface->w, surface->h};
-	SDL_BlitSurface(surface, NULL, WINDOW_SURFACE, &position);
+	SDL_BlitSurface(surface, NULL, window_surface, &position);
 	SDL_FreeSurface(surface);
 }
 
-void SDL_DrawTextf(TTF_Font *font, int x, int y, SDL_Color colour, const char* text, ...)
+void SDL_DrawTextf(SDL_Surface* window_surface, TTF_Font *font, int x, int y, SDL_Color colour, const char* text, ...)
 {
 	char buffer[256];
 	va_list args;
 	va_start(args, text);
 	vsnprintf(buffer, 256, text, args);
-	SDL_DrawText(font, x, y, colour, buffer);
+	SDL_DrawText(window_surface, font, x, y, colour, buffer);
 	va_end(args);
 }
 

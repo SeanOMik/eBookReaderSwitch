@@ -42,7 +42,7 @@ BUILD		:=	build
 SOURCES		:=	source
 DATA		:=	data
 INCLUDES	:=	include
-ROMFS	:=	RomFs
+#ROMFS	:=	RomFS
 
 #---------------------------------------------------------------------------------
 # options for code generation
@@ -53,16 +53,13 @@ CFLAGS	:=	-g -Wall -O2 -ffunction-sections \
 			$(ARCH) $(DEFINES)
 
 CFLAGS	+=	-D__SWITCH__ $(INCLUDE) `sdl2-config --cflags`
-LFLAGS=`sdl2-config --libs` -lSDL2_ttf
 
 CXXFLAGS	:= $(CFLAGS) -fno-rtti -fno-exceptions
 
 ASFLAGS	:=	-g $(ARCH)
 LDFLAGS	=	-specs=$(DEVKITPRO)/libnx/switch.specs -g $(ARCH) -Wl,-Map,$(notdir $*.map)
 
-#LIBS	:= `sdl2-config --libs`
-#LIBS    :=  -lSDL2_mixer -lmodplug -lmpg123 -lvorbisidec -logg -lSDL2_ttf -lSDL2_gfx -lSDL2_image \
-#           -lpng -ljpeg `sdl2-config --libs` -lnx -lmupdf -lmupdf-third
+#LIBS	:=	`sdl2-config --libs` -lSDL2_ttf -lSDL2_image -lmupdf -lmupdf-third
 LIBS	:= `aarch64-none-elf-pkg-config --libs sdl2` -lSDL2_ttf -lSDL2_image -lmupdf -lmupdf-third
 
 #---------------------------------------------------------------------------------
