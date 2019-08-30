@@ -1,18 +1,32 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <switch.h>
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 
-//#include "menu_book_reader.h"
+void draw_rects(SDL_Renderer *renderer, int x, int y) {
+    // R
+    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+    SDL_Rect r = {x, y, 64, 64};
+    SDL_RenderFillRect(renderer, &r);
+
+    // G
+    SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
+    SDL_Rect g = {x + 64, y, 64, 64};
+    SDL_RenderFillRect(renderer, &g);
+
+    // B
+    SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
+    SDL_Rect b = {x + 128, y, 64, 64};
+    SDL_RenderFillRect(renderer, &b);
+}
 
 int main(int argc, char *argv[]) {
     SDL_Event event;
     SDL_Window *window;
     SDL_Renderer *renderer;
-    int done = 0;
-
-    //romfsInit();
+    int done = 0, x = 0, w = 1920, h = 1080;
 
     // mandatory at least on switch, else gfx is not properly closed
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK) < 0) {
@@ -40,8 +54,10 @@ int main(int argc, char *argv[]) {
         return -1;
     }
 
-    /*TTF_Init();
-    TTF_Font *arialUnicode = TTF_OpenFont("RomFs:/arial-unicode-ms.ttf", 30);
+    romfsInit();
+
+    TTF_Init();
+    /*TTF_Font *arialUnicode = TTF_OpenFont("RomFs:/arial-unicode-ms.ttf", 30);
     if (!arialUnicode) {
         SDL_Quit();
         return -1;
@@ -59,14 +75,60 @@ int main(int argc, char *argv[]) {
         }
     }
 
-    //Menu_OpenBook("/switch/eBookReader/books/test.epub");
+    while (!done) {
+        while (SDL_PollEvent(&event)) {
+            switch (event.type) {
+                case SDL_JOYAXISMOTION:
+                    SDL_Log("Joystick %d axis %d value: %d\n",
+                            event.jaxis.which,
+                            event.jaxis.axis, event.jaxis.value);
+                    break;
 
+                case SDL_JOYBUTTONDOWN:
+                    SDL_Log("Joystick %d button %d down\n",
+                            event.jbutton.which, event.jbutton.button);
+                    // https://github.com/devkitPro/SDL/blob/switch-sdl2/src/joystick/switch/SDL_sysjoystick.c#L52
+                    // seek for joystick #0
+                    if (event.jbutton.which == 0) {
+                        if (event.jbutton.button == 0) {
+                            // (A) button down
+                        } else if (event.jbutton.button == 10) {
+                            // (+) button down
+                            done = 1;
+                        }
+                    }
+                    break;
+
+                default:
+                    break;
+            }
+        }
+
+        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+        SDL_RenderClear(renderer);
+
+        // fill window bounds
+        SDL_SetRenderDrawColor(renderer, 111, 111, 111, 255);
+        SDL_GetWindowSize(window, &w, &h);
+        SDL_Rect f = {0, 0, w, h};
+        SDL_RenderFillRect(renderer, &f);
+
+        draw_rects(renderer, x, 0);
+        draw_rects(renderer, x, h - 64);
+
+        SDL_RenderPresent(renderer);
+
+        x++;
+        if (x > w - 192) {
+            x = 0;
+        }
+    }
+
+    //Menu_OpenBook(renderer, SDL_GetWindowSurface(window), font, "/switch/eBookReader/books/test.epub");
+
+    //TTF_Quit();
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
-
-    //TTF_CloseFont(arialUnicode);
-    //TTF_Quit();
-    //romfsExit();
     SDL_Quit();
 
     return 0;
