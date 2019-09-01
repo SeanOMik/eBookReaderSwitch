@@ -76,7 +76,7 @@ void Init_Services() {
     // available switch SDL2 video modes :
     // 1920 x 1080 @ 32 bpp (SDL_PIXELFORMAT_RGBA8888)
     // 1280 x 720 @ 32 bpp (SDL_PIXELFORMAT_RGBA8888)
-    WINDOW = SDL_CreateWindow("sdl2_gles2", 0, 0, 1920, 1080, 0);
+    WINDOW = SDL_CreateWindow("sdl2_gles2", 0, 0, 1280, 720, 0);
     if (!WINDOW) {
         SDL_Log("SDL_CreateWindow: %s\n", SDL_GetError());
         Term_Services();
@@ -95,7 +95,7 @@ void Init_Services() {
 
     romfsInit();
 
-    ARIAL_UNICODE = TTF_OpenFont("romfs:/arial-unicode-ms.ttf", 30);
+    ARIAL_UNICODE = TTF_OpenFont("romfs:/arial.ttf", 35);
     if (!ARIAL_UNICODE) {
         Term_Services();
     }
@@ -122,20 +122,15 @@ int main(int argc, char *argv[]) {
     Init_Services();
 
     std::cout << "Opening test.epub" << std::endl;
-    Menu_OpenBook("/switch/eBookReader/books/test.pdf");
+    Menu_OpenBook("/switch/eBookReader/books/test.epub");
     //Menu_OpenBook("/switch/eBookReader/books/test.epub");
 
     while (run) {
         while (SDL_PollEvent(&EVENT)) {
             switch (EVENT.type) {
                 case SDL_JOYAXISMOTION:
-                    SDL_Log("Joystick %d axis %d value: %d\n",
-                            EVENT.jaxis.which,
-                            EVENT.jaxis.axis, EVENT.jaxis.value);
                     break;
                 case SDL_JOYBUTTONDOWN:
-                    SDL_Log("Joystick %d button %d down\n",
-                            EVENT.jbutton.which, EVENT.jbutton.button);
                     // https://github.com/devkitPro/SDL/blob/switch-sdl2/src/joystick/switch/SDL_sysjoystick.c#L52
                     // seek for joystick #0
                     if (EVENT.jbutton.which == 0) {
@@ -157,56 +152,6 @@ int main(int argc, char *argv[]) {
 
         SDL_RenderPresent(RENDERER);*/
     }
-
-    /*while (!done) {
-        while (SDL_PollEvent(&EVENT)) {
-            switch (EVENT.type) {
-                case SDL_JOYAXISMOTION:
-                    SDL_Log("Joystick %d axis %d value: %d\n",
-                            EVENT.jaxis.which,
-                            EVENT.jaxis.axis, EVENT.jaxis.value);
-                    break;
-
-                case SDL_JOYBUTTONDOWN:
-                    SDL_Log("Joystick %d button %d down\n",
-                            EVENT.jbutton.which, EVENT.jbutton.button);
-                    // https://github.com/devkitPro/SDL/blob/switch-sdl2/src/joystick/switch/SDL_sysjoystick.c#L52
-                    // seek for joystick #0
-                    if (EVENT.jbutton.which == 0) {
-                        if (EVENT.jbutton.button == 0) {
-                            // (A) button down
-                        } else if (EVENT.jbutton.button == 10) {
-                            // (+) button down
-                            done = 1;
-                        }
-                    }
-                    break;
-
-                default:
-                    break;
-            }
-        }
-
-        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-        SDL_RenderClear(renderer);
-
-        // fill window bounds
-        SDL_SetRenderDrawColor(renderer, 111, 111, 111, 255);
-        SDL_GetWindowSize(window, &w, &h);
-        SDL_Rect f = {0, 0, w, h};
-        SDL_RenderFillRect(renderer, &f);
-
-        draw_rects(renderer, x, 0);
-        draw_rects(renderer, x, h - 64);
-
-        SDL_RenderPresent(renderer);
-
-        x++;
-        if (x > w - 192) {
-            x = 0;
-        }
-    }*/
-    //SDL_Renderer *renderer, SDL_Surface* window_surface, TTF_Font *font, char *path
 
     Term_Services();
     return 0;

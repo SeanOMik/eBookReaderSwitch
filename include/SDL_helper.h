@@ -1,10 +1,8 @@
 #ifndef EBOOK_READER_SDL_HELPER_H
 #define EBOOK_READER_SDL_HELPER_H
 
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_ttf.h>
-
-static inline SDL_Color SDL_MakeColour(Uint8 r, Uint8 g, Uint8 b, Uint8 a) {
+static inline SDL_Color SDL_MakeColour(Uint8 r, Uint8 g, Uint8 b, Uint8 a)
+{
 	SDL_Color colour = {r, g, b, a};
 	return colour;
 }
@@ -23,15 +21,15 @@ static inline SDL_Color SDL_MakeColour(Uint8 r, Uint8 g, Uint8 b, Uint8 a) {
 #define TEXT_MIN_COLOUR_LIGHT SDL_MakeColour(32, 32, 32, 255)
 #define TEXT_MIN_COLOUR_DARK  SDL_MakeColour(185, 185, 185, 255)
 #define BAR_COLOUR            SDL_MakeColour(200, 200, 200, 255)
-#define PROGRESS_COLOUR       SDL_MakeColour(48, 174, 222, 255)
 
 void SDL_ClearScreen(SDL_Renderer *renderer, SDL_Color colour);
 void SDL_DrawRect(SDL_Renderer *renderer, int x, int y, int w, int h, SDL_Color colour);
 void SDL_DrawCircle(SDL_Renderer *renderer, int x, int y, int r, SDL_Color colour);
-void SDL_DrawText(SDL_Surface* window_surface, TTF_Font *font, int x, int y, SDL_Color colour, const char *text);
-void SDL_DrawTextf(SDL_Surface* window_surface, TTF_Font *font, int x, int y, SDL_Color colour, const char* text, ...);
+void SDL_DrawText(SDL_Renderer *renderer, TTF_Font *font, int x, int y, SDL_Color colour, const char *text);
+void SDL_DrawTextf(SDL_Renderer *renderer, TTF_Font *font, int x, int y, SDL_Color colour, const char* text, ...);
 void SDL_LoadImage(SDL_Renderer *renderer, SDL_Texture **texture, char *path);
 void SDL_LoadImageBuf(SDL_Renderer *renderer, SDL_Texture **texture, void *mem, int size);
-void SDL_DrawImage(SDL_Renderer *renderer, SDL_Texture *texture, int x, int y, int w, int h);
+void SDL_DrawImage(SDL_Renderer *renderer, SDL_Texture *texture, int x, int y);
+void SDL_DrawImageScale(SDL_Renderer *renderer, SDL_Texture *texture, int x, int y, int w, int h);
 
 #endif

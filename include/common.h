@@ -4,10 +4,9 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 
-extern SDL_Renderer* RENDERER;
-extern SDL_Window* WINDOW;
-extern SDL_Surface* WINDOW_SURFACE;
-extern TTF_Font* ARIAL_UNICODE;
-extern SDL_Event EVENT;
+extern SDL_Window *WINDOW;
+extern SDL_Surface *WINDOW_SURFACE;
+extern SDL_Renderer *RENDERER;
+extern TTF_Font *ARIAL_UNICODE;
 
 #endif
