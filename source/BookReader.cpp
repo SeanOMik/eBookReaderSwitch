@@ -2,10 +2,10 @@
 #include <string>
 
 extern "C" {
-#include "SDL_helper.h"
-//#include "status_bar.h"
-//#include "common.h"
-//#include "config.h"
+    #include "SDL_helper.h"
+    #include "status_bar.h"
+    //#include "common.h"
+    //#include "config.h"
 }
 
 fz_context *ctx = NULL;
@@ -24,7 +24,8 @@ BookReader::BookReader(SDL_Renderer *renderer, const char *path) {
         fz_register_document_handlers(ctx);
     }
     
-    doc = fz_open_document(ctx, path);
+    //doc = fz_open_document(ctx, path);
+    doc = fz_open_document_with_stream(ctx, path, fz_open_file(ctx, path));
     pdf = pdf_specifics(ctx, doc);
     
     pages_count = fz_count_pages(ctx, doc);
@@ -93,7 +94,7 @@ void BookReader::draw(SDL_Surface *window_surface, TTF_Font *font) {
     
     SDL_RenderCopy(RENDERER, page_texture, NULL, &rect);
     
-    if (--status_bar_visible_counter > 0) {
+    //if (--status_bar_visible_counter > 0) {
         char title[128];
         sprintf(title, "%i/%i, %.2f%%", current_page + 1, pages_count, zoom * 100);
         
@@ -102,11 +103,11 @@ void BookReader::draw(SDL_Surface *window_surface, TTF_Font *font) {
         
         SDL_Color color = STATUS_BAR_LIGHT;
         
-        SDL_DrawRect(RENDERER, 0, 0, 1280, 40, SDL_MakeColour(color.r, color.g, color.b , 128));
+        SDL_DrawRect(RENDERER, 0, 0, 1920, 60, SDL_MakeColour(color.r, color.g, color.b, 128));
         SDL_DrawText(window_surface, font, (screen_bounds.x1 - title_width) / 2, (44 - title_height) / 2, WHITE, title);
         
-        //StatusBar_DisplayTime();
-    }
+        StatusBar_DisplayTime();
+    //}
     
     SDL_RenderPresent(RENDERER);
 }

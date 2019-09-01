@@ -42,7 +42,15 @@ BUILD		:=	build
 SOURCES		:=	source
 DATA		:=	data
 INCLUDES	:=	include
-#ROMFS	:=	romfs
+ROMFS	:=	RomFS
+
+VERSION_MAJOR := 0
+VERSION_MINOR := 1
+VERSION_MICRO := 0
+
+APP_TITLE   := eBookReader
+APP_AUTHOR  := SeanOMik
+APP_VERSION := ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_MICRO}
 
 #---------------------------------------------------------------------------------
 # options for code generation
@@ -59,10 +67,11 @@ CXXFLAGS	:= $(CFLAGS) -fno-rtti -fno-exceptions
 ASFLAGS	:=	-g $(ARCH)
 LDFLAGS	=	-specs=$(DEVKITPRO)/libnx/switch.specs -g $(ARCH) -Wl,-Map,$(notdir $*.map)
 
-LIBS	:=	`sdl2-config --libs` -lSDL2_ttf -lSDL2_image
-#LIBS	:= -lSDL2 -lSDL2_ttf -lSDL2_gfx -lSDL2_image -lnx
+#LIBS	:=	`sdl2-config --libs` -lSDL2_ttf -lSDL2_image
+#LIBS   := `aarch64-none-elf-pkg-config --libs sdl2 SDL2_ttf SDL2_mixer`
+#LIBS   :=  `sdl2-config --libs` -lSDL2_ttf -lSDL2_image -lfreetype -lz -lnx
+LIBS    :=   `sdl2-config --libs` -lSDL2_ttf -lSDL2_image -lfreetype -lpng -ljpeg -lz -lbz2 -ltwili -lnx -lmupdf -lmupdf-third
 #LIBS	:= `aarch64-none-elf-pkg-config --libs sdl2` -lSDL2_ttf #-lSDL2_image -lmupdf -lmupdf-third
-LIBS    := `aarch64-none-elf-pkg-config --libs SDL2 SDL2_ttf SDL2_mixer`
 
 #---------------------------------------------------------------------------------
 # list of directories containing libraries, this must be the top level containing
