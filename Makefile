@@ -39,10 +39,10 @@ include $(DEVKITPRO)/libnx/switch_rules
 #---------------------------------------------------------------------------------
 TARGET		:=	$(notdir $(CURDIR))
 BUILD		:=	build
-SOURCES		:=	source
+SOURCES		:=	source    source/menus/book     source/menus/book-chooser
 DATA		:=	data
-INCLUDES    := include include/menus/book include/menus/book-chooser
-ROMFS	:=	RomFS
+INCLUDES    :=  include   include/menus/book    include/menus/book-chooser
+ROMFS	    :=	romfs
 
 VERSION_MAJOR := 0
 VERSION_MINOR := 1
@@ -57,7 +57,7 @@ APP_VERSION := ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_MICRO}
 #---------------------------------------------------------------------------------
 ARCH	:=	-march=armv8-a+crc+crypto -mtune=cortex-a57 -mtp=soft -fPIE
 
-CFLAGS	:=	-g -Wall -O2 -ffunction-sections \
+CFLAGS	:=	-g -std=c++17 -Wall -O2 -ffunction-sections \
 			$(ARCH) $(DEFINES)
 
 CFLAGS	+=	-D__SWITCH__ $(INCLUDE) `sdl2-config --cflags`
@@ -67,11 +67,11 @@ CXXFLAGS	:= $(CFLAGS) -fno-rtti -fno-exceptions
 ASFLAGS	:=	-g $(ARCH)
 LDFLAGS	=	-specs=$(DEVKITPRO)/libnx/switch.specs -g $(ARCH) -Wl,-Map,$(notdir $*.map)
 
-#LIBS	:=	`sdl2-config --libs` -lSDL2_ttf -lSDL2_image
-#LIBS   := `aarch64-none-elf-pkg-config --libs sdl2 SDL2_ttf SDL2_mixer`
+#LIBS	:=  `sdl2-config --libs` -lSDL2_ttf -lSDL2_image
+#LIBS   :=  `aarch64-none-elf-pkg-config --libs sdl2 SDL2_ttf SDL2_mixer`
 #LIBS   :=  `sdl2-config --libs` -lSDL2_ttf -lSDL2_image -lfreetype -lz -lnx
-LIBS    :=   `sdl2-config --libs` -lSDL2_ttf -lSDL2_image -lfreetype -lpng -ljpeg -lwebp -lz -lbz2 -ltwili -lnx -lmupdf -lmupdf-third
-#LIBS	:= `aarch64-none-elf-pkg-config --libs sdl2` -lSDL2_ttf #-lSDL2_image -lmupdf -lmupdf-third
+LIBS    :=  -lstdc++fs `sdl2-config --libs` -lSDL2_ttf -lSDL2_image -lfreetype -lpng -ljpeg -lwebp -lz -lbz2 -ltwili -lnx -lmupdf -lmupdf-third
+#LIBS	:=  `aarch64-none-elf-pkg-config --libs sdl2` -lSDL2_ttf #-lSDL2_image -lmupdf -lmupdf-third
 
 #---------------------------------------------------------------------------------
 # list of directories containing libraries, this must be the top level containing

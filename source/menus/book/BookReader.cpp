@@ -142,15 +142,13 @@ void BookReader::draw() {
         char *title = layout->info();
         
         int title_width = 0, title_height = 0;
-        //TTF_SizeText(Roboto, title, &title_width, &title_height);
-        TTF_SizeText(ARIAL_UNICODE, title, &title_width, &title_height);
+        TTF_SizeText(ARIAL, title, &title_width, &title_height);
         
         //SDL_Color color = config_dark_theme ? STATUS_BAR_DARK : STATUS_BAR_LIGHT;
         SDL_Color color = STATUS_BAR_LIGHT;
         
         SDL_DrawRect(RENDERER, 0, 0, 1280, 40, SDL_MakeColour(color.r, color.g, color.b , 128));
-        //SDL_DrawText(RENDERER, Roboto, (1280 - title_width) / 2, (44 - title_height) / 2, WHITE, title);
-        SDL_DrawText(RENDERER, ARIAL_UNICODE, (1280 - title_width) / 2, (44 - title_height) / 2, WHITE, title);
+        SDL_DrawText(RENDERER, ARIAL, (1280 - title_width) / 2, (44 - title_height) / 2, WHITE, title);
         
         StatusBar_DisplayTime();
     }

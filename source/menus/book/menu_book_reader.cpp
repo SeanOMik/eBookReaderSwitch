@@ -1,5 +1,6 @@
 extern "C" {
     #include "menu_book_reader.h"
+    #include "MenuChooser.h"
     #include "common.h"
 }
 
@@ -116,5 +117,6 @@ void Menu_OpenBook(char *path) {
         }*/
     }
 
+    //readingBook = false;
     delete reader;
 }

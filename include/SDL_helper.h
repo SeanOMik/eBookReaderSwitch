@@ -1,6 +1,9 @@
 #ifndef EBOOK_READER_SDL_HELPER_H
 #define EBOOK_READER_SDL_HELPER_H
 
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
+
 static inline SDL_Color SDL_MakeColour(Uint8 r, Uint8 g, Uint8 b, Uint8 a)
 {
 	SDL_Color colour = {r, g, b, a};
@@ -8,6 +11,9 @@ static inline SDL_Color SDL_MakeColour(Uint8 r, Uint8 g, Uint8 b, Uint8 a)
 }
 
 #define WHITE                 SDL_MakeColour(255, 255, 255, 255)
+#define VERY_LIGHT_GRAY       SDL_MakeColour(222, 222, 222, 255)
+#define LIGHT_GRAY            SDL_MakeColour(181, 181, 181, 255)
+#define DARK_GRAY             SDL_MakeColour(148, 148, 148, 255)
 #define BLACK_BG              SDL_MakeColour(48, 48, 48, 255)
 #define STATUS_BAR_LIGHT      SDL_MakeColour(37, 79, 174, 255)
 #define STATUS_BAR_DARK       SDL_MakeColour(38, 50, 56, 255)
