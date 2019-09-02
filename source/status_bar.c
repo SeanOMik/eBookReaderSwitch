@@ -97,14 +97,14 @@ static void StatusBar_GetBatteryStatus(int x, int y)
 		}
 
 		snprintf(buf, 5, "%d%%", percent);
-		TTF_SizeText(Roboto, buf, &width, NULL);
-		SDL_DrawText(RENDERER, Roboto, (x - width - 10), y, WHITE, buf);
+		TTF_SizeText(ARIAL_UNICODE, buf, &width, NULL);
+		SDL_DrawText(RENDERER, ARIAL_UNICODE, (x - width - 10), y, WHITE, buf);
 	}
 	else
 	{
 		snprintf(buf, 5, "%d%%", percent);
-		TTF_SizeText(Roboto, buf, &width, NULL);
-		SDL_DrawText(RENDERER, Roboto, (x - width - 10), y, WHITE, buf);
+		TTF_SizeText(ARIAL_UNICODE, buf, &width, NULL);
+		SDL_DrawText(RENDERER, ARIAL_UNICODE, (x - width - 10), y, WHITE, buf);
 		SDL_DrawImage(RENDERER, battery_unknown, x, 1);
 	}
 }
@@ -112,8 +112,8 @@ static void StatusBar_GetBatteryStatus(int x, int y)
 void StatusBar_DisplayTime(void)
 {
 	int width = 0, height = 0;
-	TTF_SizeText(Roboto, Clock_GetCurrentTime(), &width, &height);
+	TTF_SizeText(ARIAL_UNICODE, Clock_GetCurrentTime(), &width, &height);
 
 	StatusBar_GetBatteryStatus(1260 - width - 44, (40 - height) / 2);
-	SDL_DrawText(RENDERER, Roboto, 1260 - width, (40 - height) / 2, WHITE, Clock_GetCurrentTime());
+	SDL_DrawText(RENDERER, ARIAL_UNICODE, 1260 - width, (40 - height) / 2, WHITE, Clock_GetCurrentTime());
 }

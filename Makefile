@@ -41,7 +41,7 @@ TARGET		:=	$(notdir $(CURDIR))
 BUILD		:=	build
 SOURCES		:=	source
 DATA		:=	data
-INCLUDES	:=	include
+INCLUDES    := include include/menus/book include/menus/book-chooser
 ROMFS	:=	RomFS
 
 VERSION_MAJOR := 0
@@ -70,7 +70,7 @@ LDFLAGS	=	-specs=$(DEVKITPRO)/libnx/switch.specs -g $(ARCH) -Wl,-Map,$(notdir $*
 #LIBS	:=	`sdl2-config --libs` -lSDL2_ttf -lSDL2_image
 #LIBS   := `aarch64-none-elf-pkg-config --libs sdl2 SDL2_ttf SDL2_mixer`
 #LIBS   :=  `sdl2-config --libs` -lSDL2_ttf -lSDL2_image -lfreetype -lz -lnx
-LIBS    :=   `sdl2-config --libs` -lSDL2_ttf -lSDL2_image -lfreetype -lpng -ljpeg -lz -lbz2 -ltwili -lnx -lmupdf -lmupdf-third
+LIBS    :=   `sdl2-config --libs` -lSDL2_ttf -lSDL2_image -lfreetype -lpng -ljpeg -lwebp -lz -lbz2 -ltwili -lnx -lmupdf -lmupdf-third
 #LIBS	:= `aarch64-none-elf-pkg-config --libs sdl2` -lSDL2_ttf #-lSDL2_image -lmupdf -lmupdf-third
 
 #---------------------------------------------------------------------------------

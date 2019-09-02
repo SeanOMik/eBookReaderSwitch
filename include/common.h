@@ -3,6 +3,7 @@
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
+#include "SDL_helper.h"
 
 extern SDL_Window *WINDOW;
 extern SDL_Surface *WINDOW_SURFACE;

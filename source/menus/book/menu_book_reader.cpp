@@ -1,7 +1,6 @@
 extern "C" {
     #include "menu_book_reader.h"
     #include "common.h"
-    //#include "touch_helper.h"
 }
 
 #include "BookReader.hpp"
