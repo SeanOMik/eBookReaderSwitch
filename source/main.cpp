@@ -84,7 +84,7 @@ void Init_Services() {
     Textures_Load();
     std::cout << "Loaded Textures" << std::endl;*/
 
-    ARIAL = TTF_OpenFont("romfs:/arial.ttf", 35);
+    ARIAL = TTF_OpenFont("romfs:/resources/images/arial.ttf", 35);
     if (!ARIAL) {
         Term_Services();
     }

@@ -3,22 +3,22 @@
 #include "SDL_helper.h"
 
 void Textures_Load(void) {
-	SDL_LoadImage(RENDERER, &battery_20, "romfs:/battery_20.png");
-	SDL_LoadImage(RENDERER, &battery_20_charging, "romfs:/battery_20_charging.png");
-	SDL_LoadImage(RENDERER, &battery_30, "romfs:/battery_30.png");
-	SDL_LoadImage(RENDERER, &battery_30_charging, "romfs:/battery_30_charging.png");
-	SDL_LoadImage(RENDERER, &battery_50, "romfs:/battery_50.png");
-	SDL_LoadImage(RENDERER, &battery_50_charging, "romfs:/battery_50_charging.png");
-	SDL_LoadImage(RENDERER, &battery_60, "romfs:/battery_60.png");
-	SDL_LoadImage(RENDERER, &battery_60_charging, "romfs:/battery_60_charging.png");
-	SDL_LoadImage(RENDERER, &battery_80, "romfs:/battery_80.png");
-	SDL_LoadImage(RENDERER, &battery_80_charging, "romfs:/battery_80_charging.png");
-	SDL_LoadImage(RENDERER, &battery_90, "romfs:/battery_90.png");
-	SDL_LoadImage(RENDERER, &battery_90_charging, "romfs:/battery_90_charging.png");
-	SDL_LoadImage(RENDERER, &battery_full, "romfs:/battery_full.png");
-	SDL_LoadImage(RENDERER, &battery_full_charging, "romfs:/battery_full_charging.png");
-	SDL_LoadImage(RENDERER, &battery_low, "romfs:/battery_low.png");
-	SDL_LoadImage(RENDERER, &battery_unknown, "romfs:/battery_unknown.png");
+	SDL_LoadImage(RENDERER, &battery_20, "romfs:/resources/images/resources/images/battery_20.png");
+	SDL_LoadImage(RENDERER, &battery_20_charging, "romfs:/resources/images/battery_20_charging.png");
+	SDL_LoadImage(RENDERER, &battery_30, "romfs:/resources/images/battery_30.png");
+	SDL_LoadImage(RENDERER, &battery_30_charging, "romfs:/resources/images/battery_30_charging.png");
+	SDL_LoadImage(RENDERER, &battery_50, "romfs:/resources/images/battery_50.png");
+	SDL_LoadImage(RENDERER, &battery_50_charging, "romfs:/resources/images/battery_50_charging.png");
+	SDL_LoadImage(RENDERER, &battery_60, "romfs:/resources/images/battery_60.png");
+	SDL_LoadImage(RENDERER, &battery_60_charging, "romfs:/resources/images/battery_60_charging.png");
+	SDL_LoadImage(RENDERER, &battery_80, "romfs:/resources/images/battery_80.png");
+	SDL_LoadImage(RENDERER, &battery_80_charging, "romfs:/resources/images/battery_80_charging.png");
+	SDL_LoadImage(RENDERER, &battery_90, "romfs:/resources/images/battery_90.png");
+	SDL_LoadImage(RENDERER, &battery_90_charging, "romfs:/resources/images/battery_90_charging.png");
+	SDL_LoadImage(RENDERER, &battery_full, "romfs:/resources/images/battery_full.png");
+	SDL_LoadImage(RENDERER, &battery_full_charging, "romfs:/resources/images/battery_full_charging.png");
+	SDL_LoadImage(RENDERER, &battery_low, "romfs:/resources/images/battery_low.png");
+	SDL_LoadImage(RENDERER, &battery_unknown, "romfs:/resources/images/battery_unknown.png");
 }
 
 void Textures_Free(void) {

@@ -71,7 +71,7 @@ void Menu_StartChoosing() {
             string extention = filename.substr(filename.length() - 3);
             if (extention == "pdf") {
                 if (choosenIndex == space_index) {
-                    SDL_DrawRect(RENDERER, 15, 20 + (40 * space_index), 1265, 40, VERY_LIGHT_GRAY);
+                    SDL_DrawRect(RENDERER, 15, 20 + (40 * space_index), 1265, 40, SELECTOR_COLOUR_LIGHT);
                 }
 
                 SDL_DrawText(RENDERER, ARIAL, 20, 20 + (40 * space_index), BLACK, entry.path().filename().c_str());

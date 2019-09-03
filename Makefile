@@ -39,9 +39,9 @@ include $(DEVKITPRO)/libnx/switch_rules
 #---------------------------------------------------------------------------------
 TARGET		:=	$(notdir $(CURDIR))
 BUILD		:=	build
-SOURCES		:=	source    source/menus/book     source/menus/book-chooser
+SOURCES		:=	source source/menus/book source/menus/book-chooser source/helpers
 DATA		:=	data
-INCLUDES    :=  include   include/menus/book    include/menus/book-chooser
+INCLUDES    :=  include include/menus/book include/menus/book-chooser include/helpers
 ROMFS	    :=	romfs
 
 VERSION_MAJOR := 0
@@ -67,18 +67,13 @@ CXXFLAGS	:= $(CFLAGS) -fno-rtti -fno-exceptions
 ASFLAGS	:=	-g $(ARCH)
 LDFLAGS	=	-specs=$(DEVKITPRO)/libnx/switch.specs -g $(ARCH) -Wl,-Map,$(notdir $*.map)
 
-#LIBS	:=  `sdl2-config --libs` -lSDL2_ttf -lSDL2_image
-#LIBS   :=  `aarch64-none-elf-pkg-config --libs sdl2 SDL2_ttf SDL2_mixer`
-#LIBS   :=  `sdl2-config --libs` -lSDL2_ttf -lSDL2_image -lfreetype -lz -lnx
 LIBS    :=  -lstdc++fs `sdl2-config --libs` -lSDL2_ttf -lSDL2_image -lfreetype -lpng -ljpeg -lwebp -lz -lbz2 -ltwili -lnx -lmupdf -lmupdf-third
-#LIBS	:=  `aarch64-none-elf-pkg-config --libs sdl2` -lSDL2_ttf #-lSDL2_image -lmupdf -lmupdf-third
 
 #---------------------------------------------------------------------------------
 # list of directories containing libraries, this must be the top level containing
 # include and lib
 #---------------------------------------------------------------------------------
 LIBDIRS	:= $(PORTLIBS) $(LIBNX)
-
 
 #---------------------------------------------------------------------------------
 # no real need to edit anything past this point unless you need to add additional

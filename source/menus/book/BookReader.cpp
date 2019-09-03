@@ -5,11 +5,11 @@
 #include <algorithm>
 //#include <libconfig.h>
 
-extern "C"  {
+//extern "C"  {
     #include "SDL_helper.h"
     #include "status_bar.h"
     //#include "config.h"
-}
+//}
 
 fz_context *ctx = NULL;
 /*config_t *config = NULL;
@@ -131,7 +131,7 @@ void BookReader::draw() {
     /*if (config_dark_theme == true)
         SDL_ClearScreen(RENDERER, SDL_MakeColour(33, 39, 43, 255));
     else */
-        SDL_ClearScreen(RENDERER, SDL_MakeColour(255, 255, 255, 255));
+        SDL_ClearScreen(RENDERER, WHITE);
 
     SDL_RenderClear(RENDERER);
     

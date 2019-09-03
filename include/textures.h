@@ -1,5 +1,5 @@
-#ifndef NX_SHELL_TEXTURES_H
-#define NX_SHELL_TEXTURES_H
+#ifndef EBOOK_READER_TEXTURES_H
+#define EBOOK_READER_TEXTURES_H
 
 #include <SDL2/SDL.h>
 
