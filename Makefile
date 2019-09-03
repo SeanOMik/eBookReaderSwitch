@@ -50,7 +50,7 @@ VERSION_MICRO := 0
 
 APP_TITLE   := eBookReader
 APP_AUTHOR  := SeanOMik
-APP_VERSION := ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_MICRO}
+APP_VERSION := ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_MICRO}-beta
 
 #---------------------------------------------------------------------------------
 # options for code generation
