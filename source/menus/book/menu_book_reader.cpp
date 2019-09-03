@@ -4,6 +4,7 @@ extern "C" {
     #include "common.h"
 }
 
+#include <iostream>
 #include "BookReader.hpp"
 
 void Menu_OpenBook(char *path) {
@@ -68,22 +69,26 @@ void Menu_OpenBook(char *path) {
             } else if ((reader->currentPageLayout() == BookPageLayoutLandscape) && (hidGetHandheldMode())) {
                 reader->move_page_right();
             }
-        } else if (kHeld & KEY_LSTICK_LEFT) {
-            if (reader->currentPageLayout() == BookPageLayoutPortrait || (!hidGetHandheldMode())) {
+        } else if (kHeld & KEY_LSTICK_RIGHT) {
+            /*if (reader->currentPageLayout() == BookPageLayoutPortrait || (!hidGetHandheldMode())) {
                 reader->move_page_left();
-            } else if ((reader->currentPageLayout() == BookPageLayoutLandscape) && (hidGetHandheldMode())) {
+            } else */if ((reader->currentPageLayout() == BookPageLayoutLandscape) && (hidGetHandheldMode())) {
                 reader->move_page_up();
             }
-        } else if (kHeld & KEY_LSTICK_RIGHT) {
-            if (reader->currentPageLayout() == BookPageLayoutPortrait || (!hidGetHandheldMode())) {
+        } else if (kHeld & KEY_LSTICK_LEFT) {
+            /*if (reader->currentPageLayout() == BookPageLayoutPortrait || (!hidGetHandheldMode())) {
                 reader->move_page_right();
-            } else if ((reader->currentPageLayout() == BookPageLayoutLandscape) && (hidGetHandheldMode())) {
+            } else */if ((reader->currentPageLayout() == BookPageLayoutLandscape) && (hidGetHandheldMode())) {
                 reader->move_page_down();
             }
         }
 
         if (kDown & KEY_B) {
             break;
+        }
+
+        if (kDown & KEY_X) {
+            reader->permStatusBar = !reader->permStatusBar;
         }
             
         if (kDown & KEY_LSTICK || kDown & KEY_RSTICK) {
@@ -94,12 +99,10 @@ void Menu_OpenBook(char *path) {
             reader->switch_page_layout();
         }
             
-        /*if (touchInfo.state == TouchEnded && touchInfo.tapType != TapNone)
-        {
+        /*if (touchInfo.state == TouchEnded && touchInfo.tapType != TapNone) {
             float tapRegion = 120;
             
-            switch (reader->currentPageLayout())
-            {
+            switch (reader->currentPageLayout()) {
                 case BookPageLayoutPortrait:
                     if (tapped_inside(touchInfo, 0, 0, tapRegion, 720))
                         reader->previous_page(1);
@@ -117,6 +120,8 @@ void Menu_OpenBook(char *path) {
         }*/
     }
 
-    //readingBook = false;
+    std::cout << "Exiting reader" << std::endl;
+    std::cout << "Opening chooser" << std::endl;
+    Menu_StartChoosing();
     delete reader;
 }

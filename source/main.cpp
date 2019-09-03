@@ -6,47 +6,64 @@
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL_image.h>
 
-#include <twili.h>
+#ifdef DEBUG
+    #include <twili.h>
+#endif
 
 extern "C" {
     #include "common.h"
-    //#include "SDL_helper.h"
     #include "textures.h"
     #include "MenuChooser.h"
 }
 
 SDL_Renderer* RENDERER;
 SDL_Window* WINDOW;
-SDL_Surface* WINDOW_SURFACE;
-TTF_Font* ARIAL;
+//SDL_Surface* WINDOW_SURFACE;
 SDL_Event EVENT;
+TTF_Font *ARIAL, *ARIAL_35, *ARIAL_30, *ARIAL_27, *ARIAL_25, *ARIAL_20, *ARIAL_15;
 
 bool run = true;
 
 void Term_Services() {
     std::cout << "Terminate Serices" << std::endl;
+    run = false;
 
     timeExit();
+    TTF_CloseFont(ARIAL_35);
+    TTF_CloseFont(ARIAL_30);
+    TTF_CloseFont(ARIAL_27);
+    TTF_CloseFont(ARIAL_25);
+    TTF_CloseFont(ARIAL_20);
+    TTF_CloseFont(ARIAL_15);
     TTF_CloseFont(ARIAL);
     TTF_Quit();
 
     Textures_Free();
     romfsExit();
 
+    IMG_Quit();
+
     SDL_DestroyRenderer(RENDERER);
-    SDL_FreeSurface(WINDOW_SURFACE);
+    //SDL_FreeSurface(WINDOW_SURFACE);
     SDL_DestroyWindow(WINDOW);
     SDL_Quit();
 
-    twiliExit();
-    run = false;
+    #ifdef DEBUG
+        twiliExit();
+    #endif
 }
 
 void Init_Services() {
-    timeInitialize();
-    twiliInitialize();
+    #ifdef DEBUG
+        twiliInitialize();
+    #endif
+
     std::cout << "Initalize Serices" << std::endl;
+
+    romfsInit();
+    std::cout << "Initalized RomFs" << std::endl;
 
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK) < 0) {
         SDL_Log("SDL_Init: %s\n", SDL_GetError());
@@ -54,41 +71,54 @@ void Init_Services() {
     }
     std::cout << "Initalized SDL" << std::endl;
 
-    if(TTF_Init()==-1) {
-        printf("TTF_Init: %s\n", TTF_GetError());
+    timeInitialize();
+    std::cout << "Initalized Time" << std::endl;
+
+    if (SDL_CreateWindowAndRenderer(1280, 720, 0, &WINDOW, &RENDERER) == -1)  {
+        SDL_Log("SDL_CreateWindowAndRenderer: %s\n", SDL_GetError());
+        Term_Services();
+    }
+    std::cout << "Initalized Window and Renderer" << std::endl;
+
+    /*WINDOW_SURFACE = SDL_GetWindowSurface(WINDOW);
+    if (!WINDOW_SURFACE) {
+        SDL_Log("SDL_GetWindowSurface: %s\n", SDL_GetError());
+        Term_Services();
+    }
+    std::cout << "Retrevied Window Surface" << std::endl;*/
+
+    SDL_SetRenderDrawBlendMode(RENDERER, SDL_BLENDMODE_BLEND);
+	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "2");
+
+    if (!IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG)) {
+        SDL_Log("IMG_Init: %s\n", IMG_GetError());
+        Term_Services();
+    }
+    std::cout << "Initalized Image" << std::endl;
+
+    if(TTF_Init() == -1) {
+        SDL_Log("TTF_Init: %s\n", TTF_GetError());
         Term_Services();
     }
     std::cout << "Initalized TTF" << std::endl;
 
-    WINDOW = SDL_CreateWindow("sdl2_gles2", 0, 0, 1280, 720, 0);
-    if (!WINDOW) {
-        SDL_Log("SDL_CreateWindow: %s\n", SDL_GetError());
+    #ifdef EXPERIMENTAL
+        std::cout << "Loading Textures" << std::endl;
+        Textures_Load();
+    #endif
+
+    ARIAL_35 = TTF_OpenFont("romfs:/resources/font/arial.ttf", 35);
+    ARIAL_30 = TTF_OpenFont("romfs:/resources/font/arial.ttf", 30);
+    ARIAL_27 = TTF_OpenFont("romfs:/resources/font/arial.ttf", 27);
+    ARIAL_25 = TTF_OpenFont("romfs:/resources/font/arial.ttf", 25);
+    ARIAL_20 = TTF_OpenFont("romfs:/resources/font/arial.ttf", 20);
+    ARIAL_15 = TTF_OpenFont("romfs:/resources/font/arial.ttf", 15);
+    ARIAL = TTF_OpenFont("romfs:/resources/font/arial.ttf", 20);
+    if (!ARIAL_35 || !ARIAL_25 || !ARIAL_15 || !ARIAL) {
+        std::cout << "Failure to retrieve fonts" << std::endl;
         Term_Services();
     }
-    std::cout << "Initalized Window" << std::endl;
-
-    RENDERER = SDL_CreateRenderer(WINDOW, 0, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-    if (!RENDERER) {
-        SDL_Log("SDL_CreateRenderer: %s\n", SDL_GetError());
-        Term_Services();
-    }
-    std::cout << "Initalized Renderer" << std::endl;
-
-    WINDOW_SURFACE = SDL_GetWindowSurface(WINDOW);
-    std::cout << "Retrevied Window Surface" << std::endl;
-
-    romfsInit();
-    std::cout << "Initalized RomFs" << std::endl;
-
-    /*std::cout << "Loading Textures" << std::endl;
-    Textures_Load();
-    std::cout << "Loaded Textures" << std::endl;*/
-
-    ARIAL = TTF_OpenFont("romfs:/resources/images/arial.ttf", 35);
-    if (!ARIAL) {
-        Term_Services();
-    }
-    std::cout << "Gotten Fonts" << std::endl;
+    std::cout << "Retrevied Fonts" << std::endl;
     
     for (int i = 0; i < 2; i++) {
         if (SDL_JoystickOpen(i) == NULL) {
@@ -102,9 +132,6 @@ void Init_Services() {
 int main(int argc, char *argv[]) {
     Init_Services();
 
-    //std::cout << "Opening test.pdf" << std::endl;
-    //Menu_OpenBook("/switch/eBookReader/books/test.pdf");
-    //Menu_OpenBook("/switch/eBookReader/books/test.epub");
     Menu_StartChoosing();
 
     bool isBookReading = false;

@@ -16,7 +16,9 @@ class BookReader {
     public:
         BookReader(const char *path);
         ~BookReader();
-    
+
+        bool permStatusBar = false;
+
         void previous_page(int n);
         void next_page(int n);
         void zoom_in();

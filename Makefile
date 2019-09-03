@@ -62,12 +62,12 @@ CFLAGS	:=	-g -std=c++17 -Wall -O2 -ffunction-sections \
 
 CFLAGS	+=	-D__SWITCH__ $(INCLUDE) `sdl2-config --cflags`
 
-CXXFLAGS	:= $(CFLAGS) -fno-rtti -fno-exceptions
+CXXFLAGS	:= $(CFLAGS) -fno-rtti -fno-exceptions -DDEBUG=1 #-DEXPERIMENTAL=1
 
 ASFLAGS	:=	-g $(ARCH)
 LDFLAGS	=	-specs=$(DEVKITPRO)/libnx/switch.specs -g $(ARCH) -Wl,-Map,$(notdir $*.map)
 
-LIBS    :=  -lstdc++fs `sdl2-config --libs` -lSDL2_ttf -lSDL2_image -lfreetype -lpng -ljpeg -lwebp -lz -lbz2 -ltwili -lnx -lmupdf -lmupdf-third
+LIBS    :=  -lstdc++fs -lSDL2_ttf -lSDL2_image -lpng -ljpeg `sdl2-config --libs` -lfreetype -lwebp -lz -lbz2 -ltwili -lnx -lmupdf -lmupdf-third
 
 #---------------------------------------------------------------------------------
 # list of directories containing libraries, this must be the top level containing

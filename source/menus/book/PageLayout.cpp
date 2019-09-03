@@ -2,62 +2,51 @@
 #include "common.h"
 #include <algorithm>
 
-PageLayout::PageLayout(fz_document *doc, int current_page):doc(doc),pdf(pdf_specifics(ctx, doc)),pages_count(fz_count_pages(ctx, doc))
-{
+PageLayout::PageLayout(fz_document *doc, int current_page):doc(doc),pdf(pdf_specifics(ctx, doc)),pages_count(fz_count_pages(ctx, doc)) {
     _current_page = std::min(std::max(0, current_page), pages_count - 1);
     
     SDL_RenderGetViewport(RENDERER, &viewport);
     render_page_to_texture(_current_page, false);
 }
 
-void PageLayout::previous_page(int n)
-{
+void PageLayout::previous_page(int n) {
     render_page_to_texture(_current_page - n, false);
 }
 
-void PageLayout::next_page(int n)
-{
+void PageLayout::next_page(int n) {
     render_page_to_texture(_current_page + n, false);
 }
 
-void PageLayout::zoom_in()
-{
-    set_zoom(zoom + 0.1);
+void PageLayout::zoom_in() {
+    set_zoom(zoom + 0.03);
 };
 
-void PageLayout::zoom_out()
-{
-    set_zoom(zoom - 0.1);
+void PageLayout::zoom_out() {
+    set_zoom(zoom - 0.03);
 };
 
-void PageLayout::move_up()
-{
-    move_page(0, 50);
+void PageLayout::move_up() {
+    move_page(0, 3);
 };
 
-void PageLayout::move_down()
-{
-    move_page(0, -50);
+void PageLayout::move_down() {
+    move_page(0, -3);
 };
 
-void PageLayout::move_left()
-{
-    move_page(-50, 0);
+void PageLayout::move_left() {
+    move_page(-3, 0);
 };
 
-void PageLayout::move_right()
-{
-    move_page(50, 0);
+void PageLayout::move_right() {
+    move_page(3, 0);
 };
 
-void PageLayout::reset()
-{
+void PageLayout::reset() {
     page_center = fz_make_point(viewport.w / 2, viewport.h / 2);
     set_zoom(min_zoom);
 };
 
-void PageLayout::draw_page()
-{
+void PageLayout::draw_page() {
     float w = page_bounds.x1 * zoom, h = page_bounds.y1 * zoom;
     
     SDL_Rect rect;
@@ -69,15 +58,13 @@ void PageLayout::draw_page()
     SDL_RenderCopy(RENDERER, page_texture, NULL, &rect);
 }
 
-char* PageLayout::info()
-{
+char* PageLayout::info() {
     static char title[128];
     sprintf(title, "%i/%i, %.2f%%", _current_page + 1, pages_count, zoom * 100);
     return title;
 }
 
-void PageLayout::render_page_to_texture(int num, bool reset_zoom)
-{
+void PageLayout::render_page_to_texture(int num, bool reset_zoom) {
     FreeTextureIfNeeded(&page_texture);
     
     _current_page = std::min(std::max(0, num), pages_count - 1);
@@ -85,8 +72,7 @@ void PageLayout::render_page_to_texture(int num, bool reset_zoom)
     fz_page *page = fz_load_page(ctx, doc, _current_page);
     fz_rect bounds = fz_bound_page(ctx, page);
     
-    if (page_bounds.x1 != bounds.x1 || page_bounds.y1 != bounds.y1 || reset_zoom)
-    {
+    if (page_bounds.x1 != bounds.x1 || page_bounds.y1 != bounds.y1 || reset_zoom) {
         page_bounds = bounds;
         page_center = fz_make_point(viewport.w / 2, viewport.h / 2);
         
@@ -105,8 +91,7 @@ void PageLayout::render_page_to_texture(int num, bool reset_zoom)
     fz_drop_page(ctx, page);
 }
 
-void PageLayout::set_zoom(float value)
-{
+void PageLayout::set_zoom(float value) {
     value = fmin(fmax(min_zoom, value), max_zoom);
     
     if (value == zoom)
@@ -118,8 +103,7 @@ void PageLayout::set_zoom(float value)
     move_page(0, 0);
 }
 
-void PageLayout::move_page(float x, float y)
-{
+void PageLayout::move_page(float x, float y) {
     float w = page_bounds.x1 * zoom, h = page_bounds.y1 * zoom;
     
     page_center.x = fmin(fmax(page_center.x + x, w / 2), viewport.w - w / 2);

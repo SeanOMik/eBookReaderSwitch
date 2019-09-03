@@ -41,17 +41,17 @@ void SDL_DrawTextf(SDL_Renderer *renderer, TTF_Font *font, int x, int y, SDL_Col
 }
 
 void SDL_LoadImage(SDL_Renderer *renderer, SDL_Texture **texture, char *path) {
-	SDL_Surface *loaded_surface = NULL;
-	loaded_surface = IMG_Load(path);
+	SDL_Surface *imageSurface = IMG_Load(path);
 
-	if (loaded_surface)
-	{
-		Uint32 colorkey = SDL_MapRGB(loaded_surface->format, 0, 0, 0);
-		SDL_SetColorKey(loaded_surface, SDL_TRUE, colorkey);
-		*texture = SDL_CreateTextureFromSurface(renderer, loaded_surface);
+	if (imageSurface) {
+		Uint32 colorkey = SDL_MapRGB(imageSurface->format, 0, 0, 0);
+		SDL_SetColorKey(imageSurface, SDL_TRUE, colorkey);
+		*texture = SDL_CreateTextureFromSurface(renderer, imageSurface);
+	} else {
+		printf("Failed to load image: %c", path);
 	}
 
-	SDL_FreeSurface(loaded_surface);
+	SDL_FreeSurface(imageSurface);
 }
 
 void SDL_DrawImage(SDL_Renderer *renderer, SDL_Texture *texture, int x, int y) {

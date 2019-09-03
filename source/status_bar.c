@@ -42,78 +42,70 @@ static void StatusBar_GetBatteryStatus(int x, int y)
 	if (R_FAILED(psmGetChargerType(&state)))
 		state = 0;
 	
-	if (R_SUCCEEDED(psmGetBatteryChargePercentage(&percent)))
-	{
-		if (percent < 20)
+	if (R_SUCCEEDED(psmGetBatteryChargePercentage(&percent))) {
+		if (percent < 20) {
 			SDL_DrawImage(RENDERER, battery_low, x, 3);
-		else if ((percent >= 20) && (percent < 30))
-		{
-			if (state != 0)
+		} else if ((percent >= 20) && (percent < 30)) {
+			if (state != 0) {
 				SDL_DrawImage(RENDERER, battery_20_charging, x, 3);
-			else
+			} else {
 				SDL_DrawImage(RENDERER, battery_20, x, 3);
-		}
-		else if ((percent >= 30) && (percent < 50))
-		{
-			if (state != 0)
+			}
+		} else if ((percent >= 30) && (percent < 50)) {
+			if (state != 0) {
 				SDL_DrawImage(RENDERER, battery_50_charging, x, 3);
-			else
+			} else {
 				SDL_DrawImage(RENDERER, battery_50, x, 3);
-		}
-		else if ((percent >= 50) && (percent < 60))
-		{
-			if (state != 0)
+			}
+		} else if ((percent >= 50) && (percent < 60)) {
+			if (state != 0) {
 				SDL_DrawImage(RENDERER, battery_50_charging, x, 3);
-			else
+			} else {
 				SDL_DrawImage(RENDERER, battery_50, x, 3);
-		}
-		else if ((percent >= 60) && (percent < 80))
-		{
-			if (state != 0)
+			}
+		} else if ((percent >= 60) && (percent < 80)) {
+			if (state != 0) {
 				SDL_DrawImage(RENDERER, battery_60_charging, x, 3);
-			else
+			} else {
 				SDL_DrawImage(RENDERER, battery_60, x, 3);
-		}
-		else if ((percent >= 80) && (percent < 90))
-		{
-			if (state != 0)
+			}
+		} else if ((percent >= 80) && (percent < 90)) {
+			if (state != 0) {
 				SDL_DrawImage(RENDERER, battery_80_charging, x, 3);
-			else
+			} else {
 				SDL_DrawImage(RENDERER, battery_80, x, 3);
-		}
-		else if ((percent >= 90) && (percent < 100))
-		{
-			if (state != 0)
+			}
+		} else if ((percent >= 90) && (percent < 100)) {
+			if (state != 0) {
 				SDL_DrawImage(RENDERER, battery_90_charging, x, 3);
-			else
+			} else {
 				SDL_DrawImage(RENDERER, battery_90, x, 3);
-		}
-		else if (percent == 100)
-		{
-			if (state != 0)
+			}
+		} else if (percent == 100) {
+			if (state != 0) {
 				SDL_DrawImage(RENDERER, battery_full_charging, x, 3);
-			else
+			} else {
 				SDL_DrawImage(RENDERER, battery_full, x, 3);
+			}
 		}
 
 		snprintf(buf, 5, "%d%%", percent);
-		TTF_SizeText(ARIAL, buf, &width, NULL);
-		SDL_DrawText(RENDERER, ARIAL, (x - width - 10), y, WHITE, buf);
-	}
-	else
-	{
+		TTF_SizeText(ARIAL_15, buf, &width, NULL);
+		SDL_DrawText(RENDERER, ARIAL_15, (x - width - 10), y, WHITE, buf);
+	} else {
 		snprintf(buf, 5, "%d%%", percent);
-		TTF_SizeText(ARIAL, buf, &width, NULL);
-		SDL_DrawText(RENDERER, ARIAL, (x - width - 10), y, WHITE, buf);
+		TTF_SizeText(ARIAL_15, buf, &width, NULL);
+		SDL_DrawText(RENDERER, ARIAL_15, (x - width - 10), y, WHITE, buf);
 		SDL_DrawImage(RENDERER, battery_unknown, x, 1);
 	}
 }
 
-void StatusBar_DisplayTime(void)
-{
+void StatusBar_DisplayTime(void) {
 	int width = 0, height = 0;
-	TTF_SizeText(ARIAL, Clock_GetCurrentTime(), &width, &height);
+	TTF_SizeText(ARIAL_25, Clock_GetCurrentTime(), &width, &height);
 
-	//StatusBar_GetBatteryStatus(1260 - width - 44, (40 - height) / 2);
-	SDL_DrawText(RENDERER, ARIAL, 1260 - width, (40 - height) / 2, WHITE, Clock_GetCurrentTime());
+	#ifdef EXPERIMENTAL
+		//StatusBar_GetBatteryStatus(1260 - width - 44, (40 - height) / 2);
+	#endif
+	SDL_DrawText(RENDERER, ARIAL_25, 1260 - width, (40 - height) / 2, WHITE, Clock_GetCurrentTime());
 }
