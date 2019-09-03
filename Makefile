@@ -62,7 +62,7 @@ CFLAGS	:=	-g -std=c++17 -Wall -O2 -ffunction-sections \
 
 CFLAGS	+=	-D__SWITCH__ $(INCLUDE) `sdl2-config --cflags`
 
-CXXFLAGS	:= $(CFLAGS) -fno-rtti -fno-exceptions -DDEBUG=1 #-DEXPERIMENTAL=1
+CXXFLAGS	:= $(CFLAGS) -fno-rtti -fno-exceptions #-DDEBUG=1 #-DEXPERIMENTAL=1
 
 ASFLAGS	:=	-g $(ARCH)
 LDFLAGS	=	-specs=$(DEVKITPRO)/libnx/switch.specs -g $(ARCH) -Wl,-Map,$(notdir $*.map)
