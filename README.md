@@ -1,11 +1,11 @@
 # eBookReaderSwitch
 
-This is a project I've haven't worked on for a while and I'm just now getting back to it. This is a Nintendo Switch Homebrew Application and will read ePub files, or eventually, what ever MuPDF supports.
+This is a project I've recently just started working on again. Currently its using MuPDF as its backend. Currently only most pdf files work.
 
 ### Current State:
-* Linker errors.
-* Just about **ALL** of the code isn't even mine but taken from an old NX-Shell repo. 
-* Working on redoing the code.
+* It finally works!
+* So far, only **MOST** of the PDF files I've tested works.
+* Just about **ALL** of the code isn't even mine but taken from an old commit of NX-Shell.
 
 ### TODO:
-* Use MuPDF.
+* Fix some PDF crashes and all the other file extentions.
