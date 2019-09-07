@@ -3,12 +3,13 @@
 #include "LandscapePageLayout.hpp"
 #include "common.h"
 #include <algorithm>
+#include <iostream>
 //#include <libconfig.h>
 
 extern "C"  {
     #include "SDL_helper.h"
     #include "status_bar.h"
-    //#include "config.h"
+    #include "config.h"
 }
 
 fz_context *ctx = NULL;
@@ -128,10 +129,11 @@ void BookReader::switch_page_layout() {
 }
 
 void BookReader::draw() {
-    /*if (config_dark_theme == true)
-        SDL_ClearScreen(RENDERER, SDL_MakeColour(33, 39, 43, 255));
-    else */
+    if (configDarkMode == true) {
+        SDL_ClearScreen(RENDERER, BLACK);
+    } else {
         SDL_ClearScreen(RENDERER, WHITE);
+    }
 
     SDL_RenderClear(RENDERER);
     
@@ -144,13 +146,21 @@ void BookReader::draw() {
             int title_width = 0, title_height = 0;
             TTF_SizeText(ARIAL_15, title, &title_width, &title_height);
             
-            //SDL_Color color = config_dark_theme ? STATUS_BAR_DARK : STATUS_BAR_LIGHT;
-            SDL_Color color = STATUS_BAR_LIGHT;
+            SDL_Color color = configDarkMode ? STATUS_BAR_DARK : STATUS_BAR_LIGHT;
             
-            SDL_DrawRect(RENDERER, 0, 0, 1280, 45, SDL_MakeColour(color.r, color.g, color.b , 180));
-            SDL_DrawText(RENDERER, ARIAL_25, (1280 - title_width) / 2, (40 - title_height) / 2, WHITE, title);
-            
-            StatusBar_DisplayTime();
+            if (_currentPageLayout == BookPageLayoutPortrait) {
+                SDL_DrawRect(RENDERER, 0, 0, 1280, 45, SDL_MakeColour(color.r, color.g, color.b , 180));
+                SDL_DrawText(RENDERER, ARIAL_25, (1280 - title_width) / 2, (40 - title_height) / 2, WHITE, title);
+                
+                StatusBar_DisplayTime(false);
+            } else if (_currentPageLayout == BookPageLayoutLandscape) {
+                SDL_DrawRect(RENDERER, 1280 - 45, 0, 45, 720, SDL_MakeColour(color.r, color.g, color.b , 180));
+                int x = (1280 - title_width) - ((40 - title_height) / 2);
+                int y = (720 - title_height) / 2;
+                SDL_DrawRotatedText(RENDERER, ARIAL_25, (double) 90, x, y, WHITE, title);
+
+                StatusBar_DisplayTime(true);
+            }
         }
     #endif
     

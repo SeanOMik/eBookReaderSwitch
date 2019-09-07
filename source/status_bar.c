@@ -100,12 +100,20 @@ static void StatusBar_GetBatteryStatus(int x, int y)
 	}
 }
 
-void StatusBar_DisplayTime(void) {
+void StatusBar_DisplayTime(bool portriat) {
 	int width = 0, height = 0;
 	TTF_SizeText(ARIAL_25, Clock_GetCurrentTime(), &width, &height);
 
 	#ifdef EXPERIMENTAL
 		//StatusBar_GetBatteryStatus(1260 - width - 44, (40 - height) / 2);
 	#endif
-	SDL_DrawText(RENDERER, ARIAL_25, 1260 - width, (40 - height) / 2, WHITE, Clock_GetCurrentTime());
+	if (portriat) {
+		int x = (1280 - width) + height; //- ((45 - height) / 2);
+        int y = (720 - width) + 15;
+        SDL_DrawRotatedText(RENDERER, ARIAL_25, (double) 90, x, y, WHITE, Clock_GetCurrentTime());
+
+		//SDL_DrawRotatedText(RENDERER, ARIAL_25, (double) 90, 1270 - width, (720 - height), WHITE, Clock_GetCurrentTime());
+	} else {
+		SDL_DrawText(RENDERER, ARIAL_25, 1260 - width, (40 - height) / 2, WHITE, Clock_GetCurrentTime());
+	} 
 }

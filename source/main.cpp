@@ -16,6 +16,8 @@ extern "C" {
     #include "common.h"
     #include "textures.h"
     #include "MenuChooser.h"
+    #include "fs.h"
+    #include "config.h"
 }
 
 SDL_Renderer* RENDERER;
@@ -23,7 +25,7 @@ SDL_Window* WINDOW;
 //SDL_Surface* WINDOW_SURFACE;
 SDL_Event EVENT;
 TTF_Font *ARIAL, *ARIAL_35, *ARIAL_30, *ARIAL_27, *ARIAL_25, *ARIAL_20, *ARIAL_15;
-
+bool configDarkMode;
 bool run = true;
 
 void Term_Services() {
@@ -127,6 +129,10 @@ void Init_Services() {
         }
     }
     std::cout << "Initalized Input" << std::endl;
+
+    FS_RecursiveMakeDir("/switch/eBookReader/books");
+
+    configDarkMode = false;
 }
 
 int main(int argc, char *argv[]) {
