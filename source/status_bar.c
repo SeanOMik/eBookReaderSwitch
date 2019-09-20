@@ -6,8 +6,7 @@
 #include "status_bar.h"
 #include "textures.h"
 
-static char *Clock_GetCurrentTime(void)
-{
+static char *Clock_GetCurrentTime(void) {
 	static char buffer[10];
 
     time_t unixTime = time(NULL);
@@ -32,8 +31,7 @@ static char *Clock_GetCurrentTime(void)
 	return buffer;
 }
 
-static void StatusBar_GetBatteryStatus(int x, int y)
-{
+static void StatusBar_GetBatteryStatus(int x, int y) {
 	u32 percent = 0;
 	ChargerType state;
 	int width = 0;
@@ -101,19 +99,27 @@ static void StatusBar_GetBatteryStatus(int x, int y)
 }
 
 void StatusBar_DisplayTime(bool portriat) {
-	int width = 0, height = 0;
-	TTF_SizeText(ARIAL_25, Clock_GetCurrentTime(), &width, &height);
+	int timeWidth = 0, timeHeight = 0;
+	TTF_SizeText(ARIAL_25, Clock_GetCurrentTime(), &timeWidth, &timeHeight);
+	int helpWidth, helpHeight;
+	TTF_SizeText(ARIAL_20, "\"+\" - Help", &helpWidth, &helpHeight);
 
 	#ifdef EXPERIMENTAL
 		//StatusBar_GetBatteryStatus(1260 - width - 44, (40 - height) / 2);
 	#endif
 	if (portriat) {
-		int x = (1280 - width) + height; //- ((45 - height) / 2);
-        int y = (720 - width) + 15;
-        SDL_DrawRotatedText(RENDERER, ARIAL_25, (double) 90, x, y, WHITE, Clock_GetCurrentTime());
+		int timeX = (1280 - timeWidth) + timeHeight;
+        int timeY = (720 - timeWidth) + 15;
+        SDL_DrawRotatedText(RENDERER, ARIAL_25, (double) 90, timeX, timeY, WHITE, Clock_GetCurrentTime());
+		
+		int helpX = (1280 - helpWidth) + 21;
+		int helpY = (720 - helpHeight) - (720 - timeY) - 75;
+		SDL_DrawRotatedText(RENDERER, ARIAL_20, (double) 90, helpX, helpY, WHITE, "\"+\" - Help");
 
 		//SDL_DrawRotatedText(RENDERER, ARIAL_25, (double) 90, 1270 - width, (720 - height), WHITE, Clock_GetCurrentTime());
 	} else {
-		SDL_DrawText(RENDERER, ARIAL_25, 1260 - width, (40 - height) / 2, WHITE, Clock_GetCurrentTime());
+		SDL_DrawText(RENDERER, ARIAL_25, 1260 - timeWidth, (40 - timeHeight) / 2, WHITE, Clock_GetCurrentTime());
+
+		SDL_DrawText(RENDERER, ARIAL_20, 1260 - helpWidth - timeWidth - 25, (40 - helpHeight) / 2, WHITE, "\"+\" - Help");
 	} 
 }

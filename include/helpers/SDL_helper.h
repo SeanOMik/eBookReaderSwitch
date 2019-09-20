@@ -11,6 +11,8 @@ static inline SDL_Color SDL_MakeColour(Uint8 r, Uint8 g, Uint8 b, Uint8 a) {
 
 #define WHITE                 SDL_MakeColour(255, 255, 255, 255)
 #define BLACK                 SDL_MakeColour(0, 0, 0, 255)
+#define BACK_WHITE            SDL_MakeColour(200, 200, 200, 255)
+#define BACK_BLACK            SDL_MakeColour(30, 30, 30, 255)
 #define LIGHT_GRAY            SDL_MakeColour(181, 181, 181, 255)
 #define DARK_GRAY             SDL_MakeColour(148, 148, 148, 255)
 #define BLACK_BG              SDL_MakeColour(48, 48, 48, 255)

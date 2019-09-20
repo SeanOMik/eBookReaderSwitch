@@ -29,7 +29,7 @@ class BookReader {
         void move_page_right();
         void reset_page();
         void switch_page_layout();
-        void draw();
+        void draw(bool drawHelp);
     
         BookPageLayout currentPageLayout() {
             return _currentPageLayout;

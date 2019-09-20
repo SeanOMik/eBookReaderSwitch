@@ -52,52 +52,6 @@ void SDL_DrawRotatedText(SDL_Renderer *renderer, TTF_Font *font, double rotation
 	SDL_DestroyTexture(texture);
 }
 
-void SDL_InvertSurfaceColor(SDL_Surface *surface) {
-	for(int x = 0; x < (*surface).w; x++) {
-		for(int y = 0; y < (*surface).h; y++) {
-			int r, g, b, a;
-			Uint32 pixel = SDL_GetPixel32(&surface, x, y);
-			SDL_GetRGBA(pixel, SDL_GetWindowPixelFormat(&WINDOW), &r, &g, &b, &a);
-			SDL_Color color = SDL_MakeColour(255 - r, 255 - g, 255 - b, a);
-			SDL_PutPixel32(&surface, x, y, pixel);
-		}
-	}
-}
-
-Uint32 SDL_GetPixel32(SDL_Surface *surface, int x, int y) {
-	//Lock the surface.
-	if(SDL_MUSTLOCK(surface)) {
-		SDL_LockSurface(surface);
-	}
-
-    //Convert the pixels to 32 bit
-    Uint32 *pixels = (Uint32 *)surface->pixels;
-    
-    //Get the requested pixel
-    return pixels[ ( y * surface->w ) + x ];
-
-	//Unlock when we are done.
-	if(SDL_MUSTLOCK(surface))
-		SDL_UnlockSurface(surface);
-}
-
-void SDL_PutPixel32(SDL_Surface *surface, int x, int y, Uint32 pixel) {
-	//Lock the surface.
-	if(SDL_MUSTLOCK(surface)) {
-		SDL_LockSurface(surface);
-	}
-
-    //Convert the pixels to 32 bit
-    Uint32 *pixels = (Uint32 *)surface->pixels;
-    
-    //Set the pixel
-    pixels[ ( y * surface->w ) + x ] = pixel;
-
-	//Unlock when we are done.
-	if(SDL_MUSTLOCK(surface))
-		SDL_UnlockSurface(surface);
-}
-
 void SDL_DrawTextf(SDL_Renderer *renderer, TTF_Font *font, int x, int y, SDL_Color colour, const char* text, ...) {
 	char buffer[256];
 	va_list args;

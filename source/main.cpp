@@ -82,13 +82,6 @@ void Init_Services() {
     }
     std::cout << "Initalized Window and Renderer" << std::endl;
 
-    /*WINDOW_SURFACE = SDL_GetWindowSurface(WINDOW);
-    if (!WINDOW_SURFACE) {
-        SDL_Log("SDL_GetWindowSurface: %s\n", SDL_GetError());
-        Term_Services();
-    }
-    std::cout << "Retrevied Window Surface" << std::endl;*/
-
     SDL_SetRenderDrawBlendMode(RENDERER, SDL_BLENDMODE_BLEND);
 	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "2");
 
@@ -131,62 +124,15 @@ void Init_Services() {
     std::cout << "Initalized Input" << std::endl;
 
     FS_RecursiveMakeDir("/switch/eBookReader/books");
+    std::cout << "Created book directory if needed" << std::endl;
 
-    configDarkMode = false;
+    configDarkMode = true;
 }
 
 int main(int argc, char *argv[]) {
     Init_Services();
 
     Menu_StartChoosing();
-
-    bool isBookReading = false;
-    while (run) {
-        while (SDL_PollEvent(&EVENT)) {
-            switch (EVENT.type) {
-                case SDL_JOYAXISMOTION:
-                    break;
-                case SDL_JOYBUTTONDOWN:
-                    // https://github.com/devkitPro/SDL/blob/switch-sdl2/src/joystick/switch/SDL_sysjoystick.c#L52
-                    // seek for joystick #0
-                    if (EVENT.jbutton.which == 0) {
-                        if (EVENT.jbutton.button == 0) {
-                            // (A) button down
-                        } else if (EVENT.jbutton.button == 10) {
-                            // (+) button down
-                            run = false;
-                        }
-                    }
-                    break;
-
-                default:
-                    break;
-            }
-        }
-        /*SDL_ClearScreen(RENDERER, WHITE);
-		SDL_RenderClear(RENDERER);
-
-        SDL_RenderPresent(RENDERER);*/
-        /*if (!isBookReading) {
-            SDL_ClearScreen(RENDERER, WHITE);
-            std::cout << "Cleared Screen" << std::endl;
-            SDL_RenderClear(RENDERER);
-            std::cout << "Render Clear" << std::endl;*/
-
-            /*int space_index = 0;
-            while ((entry = readdir(dir)) != NULL) {
-                SDL_DrawText(RENDERER, ARIAL, 20, 20 + (30 * space_index), BLACK, entry->d_name);
-                space_index++;
-                //cout << entry->d_name << endl;
-            }*/
-
-            /*SDL_DrawText(RENDERER, ARIAL, 50, 50, BLACK, "TEST");
-            std::cout << "Draw text" << std::endl;
-
-            SDL_RenderPresent(RENDERER);
-            std::cout << "Render Present" << std::endl;
-        }*/
-    }
 
     Term_Services();
     return 0;

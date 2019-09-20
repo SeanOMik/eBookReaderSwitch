@@ -2,6 +2,8 @@ extern "C" {
     #include "menu_book_reader.h"
     #include "MenuChooser.h"
     #include "common.h"
+    #include "config.h"
+    #include "SDL_helper.h"
 }
 
 #include <iostream>
@@ -13,8 +15,11 @@ void Menu_OpenBook(char *path) {
     /*TouchInfo touchInfo;
     Touch_Init(&touchInfo);*/
     
+    bool helpMenu = false;
+    
+
     while(appletMainLoop()) {
-        reader->draw();
+        reader->draw(helpMenu);
         
         hidScanInput();
 
@@ -23,82 +28,93 @@ void Menu_OpenBook(char *path) {
         u64 kDown = hidKeysDown(CONTROLLER_P1_AUTO);
         u64 kHeld = hidKeysHeld(CONTROLLER_P1_AUTO);
         
-        if (kDown & KEY_DLEFT) {
-            if (reader->currentPageLayout() == BookPageLayoutPortrait || (!hidGetHandheldMode()))
+        if (!helpMenu && kDown & KEY_DLEFT) {
+            if (reader->currentPageLayout() == BookPageLayoutPortrait || (!hidGetHandheldMode())) {
                 reader->previous_page(1);
-            else if ((reader->currentPageLayout() == BookPageLayoutLandscape) && (hidGetHandheldMode()))
+            } else if ((reader->currentPageLayout() == BookPageLayoutLandscape) && (hidGetHandheldMode())) {
                 reader->zoom_out();
-        } else if (kDown & KEY_DRIGHT) {
-            if (reader->currentPageLayout() == BookPageLayoutPortrait || (!hidGetHandheldMode()))
+            }
+        } else if (!helpMenu && kDown & KEY_DRIGHT) {
+            if (reader->currentPageLayout() == BookPageLayoutPortrait || (!hidGetHandheldMode())) {
                 reader->next_page(1);
-            else if ((reader->currentPageLayout() == BookPageLayoutLandscape) && (hidGetHandheldMode()))
+            } else if ((reader->currentPageLayout() == BookPageLayoutLandscape) && (hidGetHandheldMode())) {
                 reader->zoom_in();
+            }
         }
 
-        if (kDown & KEY_R) {
+        if (!helpMenu && kDown & KEY_R) {
             reader->next_page(10);
-        } else if (kDown & KEY_L) {
+        } else if (!helpMenu && kDown & KEY_L) {
             reader->previous_page(10);
         }
 
-        if ((kDown & KEY_DUP) || (kHeld & KEY_RSTICK_UP)) {
+        if (!helpMenu && ((kDown & KEY_DUP) || (kHeld & KEY_RSTICK_UP))) {
             if (reader->currentPageLayout() == BookPageLayoutPortrait || (!hidGetHandheldMode())) {
                 reader->zoom_in();
             } else if ((reader->currentPageLayout() == BookPageLayoutLandscape) && (hidGetHandheldMode())) {
                 reader->previous_page(1);
             }
-            //reader->reset_page();
-        } else if ((kDown & KEY_DDOWN) || (kHeld & KEY_RSTICK_DOWN)) {
+        } else if (!helpMenu && ((kDown & KEY_DDOWN) || (kHeld & KEY_RSTICK_DOWN))) {
             if (reader->currentPageLayout() == BookPageLayoutPortrait || (!hidGetHandheldMode())) {
                 reader->zoom_out();
             } else if ((reader->currentPageLayout() == BookPageLayoutLandscape) && (hidGetHandheldMode())) {
                 reader->next_page(1);
             }
-            //reader->reset_page();
         }
 
-        if (kHeld & KEY_LSTICK_UP) {
+        if (!helpMenu && kHeld & KEY_LSTICK_UP) {
             if (reader->currentPageLayout() == BookPageLayoutPortrait || (!hidGetHandheldMode())) {
                 reader->move_page_up();
             } else if ((reader->currentPageLayout() == BookPageLayoutLandscape) && (hidGetHandheldMode())) {
                 reader->move_page_left();
             }
-        } else if (kHeld & KEY_LSTICK_DOWN) {
+        } else if (!helpMenu && kHeld & KEY_LSTICK_DOWN) {
             if (reader->currentPageLayout() == BookPageLayoutPortrait || (!hidGetHandheldMode())) {
                 reader->move_page_down();
             } else if ((reader->currentPageLayout() == BookPageLayoutLandscape) && (hidGetHandheldMode())) {
                 reader->move_page_right();
             }
-        } else if (kHeld & KEY_LSTICK_RIGHT) {
-            /*if (reader->currentPageLayout() == BookPageLayoutPortrait || (!hidGetHandheldMode())) {
-                reader->move_page_left();
-            } else */if ((reader->currentPageLayout() == BookPageLayoutLandscape) && (hidGetHandheldMode())) {
-                reader->move_page_up();
-            }
-        } else if (kHeld & KEY_LSTICK_LEFT) {
-            /*if (reader->currentPageLayout() == BookPageLayoutPortrait || (!hidGetHandheldMode())) {
-                reader->move_page_right();
-            } else */if ((reader->currentPageLayout() == BookPageLayoutLandscape) && (hidGetHandheldMode())) {
+        } else if (!helpMenu && kHeld & KEY_LSTICK_RIGHT) {
+            if ((reader->currentPageLayout() == BookPageLayoutLandscape) && (hidGetHandheldMode())) {
+                //reader->move_page_up();
                 reader->move_page_down();
+            }
+        } else if (!helpMenu && kHeld & KEY_LSTICK_LEFT) {
+            if ((reader->currentPageLayout() == BookPageLayoutLandscape) && (hidGetHandheldMode())) {
+                //reader->move_page_down();
+                reader->move_page_up();
             }
         }
 
         if (kDown & KEY_B) {
-            break;
+            if (helpMenu) {
+                helpMenu = !helpMenu;
+            } else {
+                break;
+            }
         }
 
-        if (kDown & KEY_X) {
+        if (!helpMenu && kDown & KEY_X) {
             reader->permStatusBar = !reader->permStatusBar;
         }
             
-        if (kDown & KEY_LSTICK || kDown & KEY_RSTICK) {
+        if (!helpMenu && kDown & KEY_LSTICK || kDown & KEY_RSTICK) {
             reader->reset_page();
         }
         
-        if (kDown & KEY_Y) {
+        if (!helpMenu && kDown & KEY_Y) {
             reader->switch_page_layout();
         }
-            
+
+        if (!helpMenu && kDown & KEY_MINUS) {
+            configDarkMode = !configDarkMode;
+            reader->previous_page(0);
+        }
+
+        if (kDown & KEY_PLUS) {
+            helpMenu = !helpMenu;
+        }
+        
         /*if (touchInfo.state == TouchEnded && touchInfo.tapType != TapNone) {
             float tapRegion = 120;
             

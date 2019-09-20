@@ -25,19 +25,34 @@ void Textures_Load(void) {
 	SDL_LoadImage(RENDERER, &battery_unknown, "romfs:/resources/images/battery_unknown.png");*/
 	//SDL_LoadImage(RENDERER, &error, "romfs:/resources/images/error.png");
 
+	fprintf(stderr, "LOADING WARNING\n");
 	SDL_Surface *imageSurface = IMG_Load("romfs:/resources/images/warning.png");
+	fprintf(stderr, "LOADED WARNING\n");
 
-	if (imageSurface) {
-		warning = SDL_CreateTextureFromSurface(RENDERER, imageSurface);
-		if (warning == NULL) {
-			fprintf(stderr, "CreateTextureFromSurface failed: %s\n", SDL_GetError());
+	if (RENDERER) {
+		if (imageSurface) {
+			fprintf(stderr, "CREATING TEXTURE\n");
+			warning = SDL_CreateTextureFromSurface(RENDERER, imageSurface);
+			fprintf(stderr, "CREATED TEXTURE\n");
+
+			if (warning == NULL) {
+				fprintf(stderr, "CreateTextureFromSurface failed: %s\n", SDL_GetError());
+				exit(1);
+			} else {
+				fprintf(stderr, "Loaded \"romfs:/resources/images/warning.png\"\n");
+			}
+		} else {
+			fprintf(stderr, "Failed to load image: \"romfs:/resources/images/warning.png\"\n");
 			exit(1);
 		}
-
-		printf("Loaded \"romfs:/resources/images/warning.png\"\n");
 	} else {
-		printf("Failed to load image: \"romfs:/resources/images/warning.png\"\n");
+		fprintf(stderr, "Something wrong with RENDERER");
+		exit(1);
 	}
+
+	SDL_FreeSurface(imageSurface);
+
+	
 	/*if (imageSurface) {
 		Uint32 colorkey = SDL_MapRGB(imageSurface->format, 0, 0, 0);
 		SDL_SetColorKey(imageSurface, SDL_TRUE, colorkey);

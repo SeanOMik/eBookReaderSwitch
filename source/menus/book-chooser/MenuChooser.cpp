@@ -4,6 +4,7 @@ extern "C" {
     #include "SDL_helper.h"
     #include "common.h"
     #include "textures.h"
+    #include "config.h"
 }
 
 #include <switch.h>
@@ -52,7 +53,10 @@ void Menu_StartChoosing() {
             break;
         }
 
-        SDL_ClearScreen(RENDERER, WHITE);
+        SDL_Color textColor = configDarkMode ? WHITE : BLACK;
+        SDL_Color backColor = configDarkMode ? BACK_BLACK : BACK_WHITE;
+
+        SDL_ClearScreen(RENDERER, backColor);
 		SDL_RenderClear(RENDERER);
 
         hidScanInput();
@@ -60,12 +64,16 @@ void Menu_StartChoosing() {
         u64 kDown = hidKeysDown(CONTROLLER_P1_AUTO);
         u64 kHeld = hidKeysHeld(CONTROLLER_P1_AUTO);
 
-        if (kDown & KEY_PLUS) {
+        /*if (!isWarningOnScreen && kDown & KEY_PLUS) {
             break;
-        }
+        }*/
 
         if (kDown & KEY_B) {
-            isWarningOnScreen = false;
+            if (!isWarningOnScreen) {
+                break;
+            } else {
+                isWarningOnScreen = false;
+            }
         }
 
         if (kDown & KEY_A) {
@@ -77,9 +85,9 @@ void Menu_StartChoosing() {
                 if (contains(allowedExtentions, extention)) {
                     if (bookIndex == choosenIndex) {
                         if (contains(warnedExtentions, extention)) {
-                            #ifdef EXPERIMENTAL
+                            /*#ifdef EXPERIMENTAL
                                 SDL_DrawImage(RENDERER, warning, 5, 10 + (40 * choosingIndex));
-                            #endif
+                            #endif*/
                             if (isWarningOnScreen) {
                                 goto OPEN_BOOK;
                             } else {
@@ -102,12 +110,27 @@ void Menu_StartChoosing() {
         }
 
         if (kDown & KEY_DUP) {
-            if (choosenIndex != 0 && !isWarningOnScreen) choosenIndex--;
+            if (choosenIndex != 0 && !isWarningOnScreen) {
+                choosenIndex--;
+            } else if (choosenIndex == 0) {
+                choosenIndex = amountOfFiles-1;
+            }
         }
 
         if (kDown & KEY_DDOWN) {
-            if (choosenIndex < amountOfFiles-1 && !isWarningOnScreen) choosenIndex++;
+            if (choosenIndex == amountOfFiles-1) {
+                choosenIndex = 0;
+            } else if (choosenIndex < amountOfFiles-1 && !isWarningOnScreen) {
+                choosenIndex++;
+            }
         }
+
+        if (kDown & KEY_MINUS) {
+            configDarkMode = !configDarkMode;
+        }
+
+        SDL_DrawText(RENDERER, ARIAL_25, windowX - 123, windowY - 35, textColor, "\"B\" - Exit");
+        SDL_DrawText(RENDERER, ARIAL_25, windowX - 200, windowY - 35 * 2, textColor, "\"-\" - Switch theme");
 
         int choosingIndex = 0;
         for (const auto & entry : fs::directory_iterator(path)) {
@@ -116,26 +139,27 @@ void Menu_StartChoosing() {
 
             if (contains(allowedExtentions, extention)) {
                 if (choosenIndex == choosingIndex) {
-                    SDL_DrawRect(RENDERER, 15, 15 + (40 * choosingIndex), 1265, 40, SELECTOR_COLOUR_LIGHT);
+                    SDL_DrawRect(RENDERER, 15, 15 + (40 * choosingIndex), 1265, 40, configDarkMode ? SELECTOR_COLOUR_DARK : SELECTOR_COLOUR_LIGHT);
                 }
 
                 #ifdef EXPERIMENTAL
                     if (contains(warnedExtentions, extention)) {
-                        SDL_DrawImage(RENDERER, warning, 5, 10 + (40 * choosingIndex));
+                        //SDL_DrawImage(RENDERER, warning, 5, 10 + (40 * choosingIndex));
                     }
                 #endif
                 
-                SDL_DrawText(RENDERER, ARIAL_25, 50, 20 + (40 * choosingIndex), BLACK, entry.path().filename().c_str());
-                SDL_DrawText(RENDERER, ARIAL_25, windowX - 123, windowY - 35, BLACK, "\"+\"  -  Exit");
+                SDL_DrawText(RENDERER, ARIAL_25, 50, 20 + (40 * choosingIndex), textColor, entry.path().filename().c_str());
 
                 if (isWarningOnScreen) {
-                    SDL_DrawRect(RENDERER, 0, 0, 1280, 720, SDL_MakeColour(50, 50, 50, 150));
+                    if (!configDarkMode) { // Display a dimmed background if on light mode
+                        SDL_DrawRect(RENDERER, 0, 0, 1280, 720, SDL_MakeColour(50, 50, 50, 150));
+                    }
 
-                    SDL_DrawRect(RENDERER, (windowX - warningWidth) / 2, (windowY - warningHeight) / 2, warningWidth, warningHeight, HINT_COLOUR_LIGHT);
-                    SDL_DrawText(RENDERER, ARIAL_30, (windowX - warningWidth) / 2 + 15, (windowY - warningHeight) / 2 + 15, BLACK, "This file is not yet fully supported, and may");
-                    SDL_DrawText(RENDERER, ARIAL_30, (windowX - warningWidth) / 2 + 15, (windowY - warningHeight) / 2 + 50, BLACK, "cause a system, or app crash.");
-                    SDL_DrawText(RENDERER, ARIAL_20, (windowX - warningWidth) / 2 + warningWidth - 250, (windowY - warningHeight) / 2 + warningHeight - 30, BLACK, "\"A\" - Read");
-                    SDL_DrawText(RENDERER, ARIAL_20, (windowX - warningWidth) / 2 + warningWidth - 125, (windowY - warningHeight) / 2 + warningHeight - 30, BLACK, "\"B\" - Cancel.");
+                    SDL_DrawRect(RENDERER, (windowX - warningWidth) / 2, (windowY - warningHeight) / 2, warningWidth, warningHeight, configDarkMode ? HINT_COLOUR_DARK : HINT_COLOUR_LIGHT);
+                    SDL_DrawText(RENDERER, ARIAL_30, (windowX - warningWidth) / 2 + 15, (windowY - warningHeight) / 2 + 15, textColor, "This file is not yet fully supported, and may");
+                    SDL_DrawText(RENDERER, ARIAL_30, (windowX - warningWidth) / 2 + 15, (windowY - warningHeight) / 2 + 50, textColor, "cause a system, or app crash.");
+                    SDL_DrawText(RENDERER, ARIAL_20, (windowX - warningWidth) / 2 + warningWidth - 250, (windowY - warningHeight) / 2 + warningHeight - 30, textColor, "\"A\" - Read");
+                    SDL_DrawText(RENDERER, ARIAL_20, (windowX - warningWidth) / 2 + warningWidth - 125, (windowY - warningHeight) / 2 + warningHeight - 30, textColor, "\"B\" - Cancel.");
                 }
 
                 choosingIndex++;
