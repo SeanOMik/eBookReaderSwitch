@@ -9,3 +9,6 @@ This is a project I've recently just started working on again. Currently its usi
 
 ### TODO:
 * Fix some PDF crashes and all the other file extentions.
+* 2 pages side by side in landscape
+* Dark mode
+* Hardware lock to prevent accidental touches (maybe Vol- ?) (?)
