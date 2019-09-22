@@ -17,7 +17,6 @@ void Menu_OpenBook(char *path) {
     
     bool helpMenu = false;
     
-
     while(appletMainLoop()) {
         reader->draw(helpMenu);
         

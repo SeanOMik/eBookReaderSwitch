@@ -46,11 +46,12 @@ ROMFS	    :=	romfs
 
 VERSION_MAJOR := 0
 VERSION_MINOR := 2
-VERSION_MICRO := 0
+VERSION_MICRO := 1
 
 APP_TITLE   := eBookReader
 APP_AUTHOR  := SeanOMik
 APP_VERSION := ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_MICRO}-beta
+ICON := icon.jpg
 
 #---------------------------------------------------------------------------------
 # options for code generation
@@ -62,12 +63,12 @@ CFLAGS	:=	-g -std=c++17 -Wall -O2 -ffunction-sections \
 
 CFLAGS	+=	-D__SWITCH__ $(INCLUDE) `sdl2-config --cflags`
 
-CXXFLAGS	:= $(CFLAGS) -fno-rtti -fno-exceptions #-DDEBUG=1 #-DEXPERIMENTAL=1
+CXXFLAGS	:= $(CFLAGS) -fno-rtti -fno-exceptions -DDEBUG=1 #-DEXPERIMENTAL=1
 
 ASFLAGS	:=	-g $(ARCH)
 LDFLAGS	=	-specs=$(DEVKITPRO)/libnx/switch.specs -g $(ARCH) -Wl,-Map,$(notdir $*.map)
 
-LIBS    :=  -lstdc++fs -lSDL2_ttf -lSDL2_image -lpng -ljpeg `sdl2-config --libs` -lfreetype -lwebp -lz -lbz2 -ltwili -lnx -lmupdf -lmupdf-third
+LIBS    :=  -lstdc++fs -lSDL2_ttf -lSDL2_image -lpng -ljpeg `sdl2-config --libs` -lfreetype -lwebp -lz -lbz2 -ltwili -lconfig -lnx -lmupdf -lmupdf-third #-lmupdf_core -lmupdf_thirdparty
 
 #---------------------------------------------------------------------------------
 # list of directories containing libraries, this must be the top level containing

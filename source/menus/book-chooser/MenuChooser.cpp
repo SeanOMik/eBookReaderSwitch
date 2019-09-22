@@ -129,7 +129,7 @@ void Menu_StartChoosing() {
             configDarkMode = !configDarkMode;
         }
 
-        SDL_DrawText(RENDERER, ARIAL_25, windowX - 123, windowY - 35, textColor, "\"B\" - Exit");
+        SDL_DrawText(RENDERER, ARIAL_25, windowX - 123, windowY - 45, textColor, "\"B\" - Exit");
         SDL_DrawText(RENDERER, ARIAL_25, windowX - 200, windowY - 35 * 2, textColor, "\"-\" - Switch theme");
 
         int choosingIndex = 0;

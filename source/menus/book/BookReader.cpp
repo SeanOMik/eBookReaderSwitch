@@ -4,7 +4,7 @@
 #include "common.h"
 #include <algorithm>
 #include <iostream>
-//#include <libconfig.h>
+#include <libconfig.h>
 
 extern "C"  {
     #include "SDL_helper.h"
@@ -14,13 +14,14 @@ extern "C"  {
 
 fz_context *ctx = NULL;
 int windowX, windowY;
-/*config_t *config = NULL;
+config_t *config = NULL;
+char* configFile = "/switch/eBookReader/saved_pages.cfg";
 
 static int load_last_page(const char *book_name)  {
     if (!config) {
         config = (config_t *)malloc(sizeof(config_t));
         config_init(config);
-        config_read_file(config, "/switch/NX-Shell/last_book_pages.cfg");
+        config_read_file(config, configFile);
     }
     
     config_setting_t *setting = config_setting_get_member(config_root_setting(config), book_name);
@@ -41,9 +42,9 @@ static void save_last_page(const char *book_name, int current_page) {
     
     if (setting) {
         config_setting_set_int(setting, current_page);
-        config_write_file(config, "/switch/NX-Shell/last_book_pages.cfg");
+        config_write_file(config, configFile);
     }
-}*/
+}
 
 BookReader::BookReader(const char *path) {
     if (ctx == NULL) {
@@ -60,10 +61,11 @@ BookReader::BookReader(const char *path) {
         book_name.erase(std::remove(book_name.begin(), book_name.end(), c), book_name.end());
     }
     
+    std::cout << "fz_open_document" << std::endl;
     doc = fz_open_document(ctx, path);
     
-    //int current_page = load_last_page(book_name.c_str());
-    int current_page = 0;
+    int current_page = load_last_page(book_name.c_str());
+    //int current_page = 0;
     switch_current_page_layout(_currentPageLayout, current_page);
     
     if (current_page > 0) {
@@ -80,13 +82,13 @@ BookReader::~BookReader() {
 void BookReader::previous_page(int n) {
     layout->previous_page(n);
     show_status_bar();
-    //save_last_page(book_name.c_str(), layout->current_page());
+    save_last_page(book_name.c_str(), layout->current_page());
 }
 
 void BookReader::next_page(int n) {
     layout->next_page(n);
     show_status_bar();
-    //save_last_page(book_name.c_str(), layout->current_page());
+    save_last_page(book_name.c_str(), layout->current_page());
 }
 
 void BookReader::zoom_in() {

@@ -74,7 +74,7 @@ void PageLayout::render_page_to_texture(int num, bool reset_zoom) {
     FreeTextureIfNeeded(&page_texture);
     
     _current_page = std::min(std::max(0, num), pages_count - 1);
-    
+
     fz_page *page = fz_load_page(ctx, doc, _current_page);
     fz_rect bounds = fz_bound_page(ctx, page);
     

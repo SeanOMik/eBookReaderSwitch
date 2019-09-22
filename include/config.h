@@ -3,4 +3,6 @@
 
 extern bool configDarkMode;
 
+extern char* configFile;
+
 #endif
