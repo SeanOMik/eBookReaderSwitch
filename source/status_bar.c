@@ -88,12 +88,12 @@ static void StatusBar_GetBatteryStatus(int x, int y) {
 		}
 
 		snprintf(buf, 5, "%d%%", percent);
-		TTF_SizeText(ARIAL_15, buf, &width, NULL);
-		SDL_DrawText(RENDERER, ARIAL_15, (x - width - 10), y, WHITE, buf);
+		TTF_SizeText(ARIAL_20, buf, &width, NULL);
+		SDL_DrawText(RENDERER, ARIAL_20, (x + width + 5), y, WHITE, buf);
 	} else {
 		snprintf(buf, 5, "%d%%", percent);
-		TTF_SizeText(ARIAL_15, buf, &width, NULL);
-		SDL_DrawText(RENDERER, ARIAL_15, (x - width - 10), y, WHITE, buf);
+		TTF_SizeText(ARIAL_20, buf, &width, NULL);
+		SDL_DrawText(RENDERER, ARIAL_20, (x + width + 5), y, WHITE, buf);
 		SDL_DrawImage(RENDERER, battery_unknown, x, 1);
 	}
 }
@@ -104,9 +104,6 @@ void StatusBar_DisplayTime(bool portriat) {
 	int helpWidth, helpHeight;
 	TTF_SizeText(ARIAL_20, "\"+\" - Help", &helpWidth, &helpHeight);
 
-	#ifdef EXPERIMENTAL
-		//StatusBar_GetBatteryStatus(1260 - width - 44, (40 - height) / 2);
-	#endif
 	if (portriat) {
 		int timeX = (1280 - timeWidth) + timeHeight;
         int timeY = (720 - timeWidth) + 15;
@@ -121,5 +118,11 @@ void StatusBar_DisplayTime(bool portriat) {
 		SDL_DrawText(RENDERER, ARIAL_25, 1260 - timeWidth, (40 - timeHeight) / 2, WHITE, Clock_GetCurrentTime());
 
 		SDL_DrawText(RENDERER, ARIAL_20, 1260 - helpWidth - timeWidth - 25, (40 - helpHeight) / 2, WHITE, "\"+\" - Help");
-	} 
+
+		StatusBar_GetBatteryStatus(1260 - (timeWidth + helpWidth) - 110, (40 - timeHeight) / 2 + 15); // 34 is height of battery img
+	}
+
+	#ifdef EXPERIMENTAL
+		
+	#endif
 }

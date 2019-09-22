@@ -1,5 +1,6 @@
 #include "common.h"
 #include "SDL_helper.h"
+#include <SDL2/SDL_image.h>
 
 void SDL_ClearScreen(SDL_Renderer *renderer, SDL_Color colour) {
 	SDL_SetRenderDrawColor(renderer, colour.r, colour.g, colour.b, colour.a);
@@ -41,14 +42,11 @@ void SDL_DrawRotatedText(SDL_Renderer *renderer, TTF_Font *font, double rotation
 	position.x = x; position.y = y;
 	SDL_QueryTexture(texture, NULL, NULL, &position.w, &position.h);
 	SDL_Point center = {position.w / 2, position.h / 2};
-    SDL_Rect crop = {0, 0, &position.w, &position.h}; // the crop is what part of the image we want to display.
+    SDL_Rect crop = {0, 0, &position.w, &position.h};
 
 	SDL_SetRenderTarget(renderer, texture);
-	//SDL_RenderCopyEx(RENDERER, texture, &crop, &position, rotation, &center, SDL_FLIP_NONE);
 	SDL_RenderCopyEx(RENDERER, texture, NULL, &position, rotation, NULL, SDL_FLIP_NONE);
 	SDL_SetRenderTarget(renderer, NULL);
-	/*SDL_QueryTexture(texture, NULL, NULL, &position.w, &position.h);
-	SDL_RenderCopy(renderer, texture, NULL, &position);*/
 	SDL_DestroyTexture(texture);
 }
 
@@ -61,18 +59,21 @@ void SDL_DrawTextf(SDL_Renderer *renderer, TTF_Font *font, int x, int y, SDL_Col
 	va_end(args);
 }
 
-void SDL_LoadImage(SDL_Renderer *renderer, SDL_Texture **texture, char *path) {
-	SDL_Surface *imageSurface = IMG_Load(path);
+void SDL_LoadImage(SDL_Texture **texture, char *path) {
+	SDL_Surface *image = NULL;
 
-	if (imageSurface) {
-		Uint32 colorkey = SDL_MapRGB(imageSurface->format, 0, 0, 0);
-		SDL_SetColorKey(imageSurface, SDL_TRUE, colorkey);
-		*texture = SDL_CreateTextureFromSurface(renderer, imageSurface);
-	} else {
-		printf("Failed to load image: %s", path);
+	image = IMG_Load(path);
+	if (!image) {
+		//DEBUG_LOG("IMG_Load failed: %s\n", IMG_GetError());
+		printf("IMG_Load failed: %s\n", IMG_GetError());
+		
+		return;
 	}
-
-	SDL_FreeSurface(imageSurface);
+	
+	SDL_ConvertSurfaceFormat(image, SDL_PIXELFORMAT_RGBA8888, 0);
+	*texture = SDL_CreateTextureFromSurface(RENDERER, image);
+	SDL_FreeSurface(image);
+	image = NULL;
 }
 
 void SDL_DrawImage(SDL_Renderer *renderer, SDL_Texture *texture, int x, int y) {

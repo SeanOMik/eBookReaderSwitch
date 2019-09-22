@@ -36,7 +36,8 @@ void SDL_DrawCircle(SDL_Renderer *renderer, int x, int y, int r, SDL_Color colou
 void SDL_DrawText(SDL_Renderer *renderer, TTF_Font *font, int x, int y, SDL_Color colour, const char *text);
 void SDL_DrawRotatedText(SDL_Renderer *renderer, TTF_Font *font, double rotation, int x, int y, SDL_Color colour, const char *text);
 void SDL_DrawTextf(SDL_Renderer *renderer, TTF_Font *font, int x, int y, SDL_Color colour, const char* text, ...);
-void SDL_LoadImage(SDL_Renderer *renderer, SDL_Texture **texture, char *path);
+//void SDL_LoadImage(SDL_Renderer *renderer, SDL_Texture **texture, char *path);
+void SDL_LoadImage(SDL_Texture **texture, char *path);
 void SDL_LoadImageBuf(SDL_Renderer *renderer, SDL_Texture **texture, void *mem, int size);
 void SDL_DrawImage(SDL_Renderer *renderer, SDL_Texture *texture, int x, int y);
 void SDL_DrawImageScale(SDL_Renderer *renderer, SDL_Texture *texture, int x, int y, int w, int h);

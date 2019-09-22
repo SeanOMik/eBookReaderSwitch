@@ -17,8 +17,8 @@ extern "C" {
 using namespace std;
 namespace fs = filesystem;
 
-template <typename T> bool contains(std::list<T> & listOfElements, const T & element) {
-	auto it = std::find(listOfElements.begin(), listOfElements.end(), element);
+template <typename T> bool contains(list<T> & listOfElements, const T & element) {
+	auto it = find(listOfElements.begin(), listOfElements.end(), element);
 	return it != listOfElements.end();
 }
 
@@ -130,7 +130,7 @@ void Menu_StartChoosing() {
         }
 
         SDL_DrawText(RENDERER, ARIAL_25, windowX - 123, windowY - 45, textColor, "\"B\" - Exit");
-        SDL_DrawText(RENDERER, ARIAL_25, windowX - 200, windowY - 35 * 2, textColor, "\"-\" - Switch theme");
+        SDL_DrawText(RENDERER, ARIAL_25, windowX - 200, windowY - 80, textColor, "\"-\" - Switch theme");
 
         int choosingIndex = 0;
         for (const auto & entry : fs::directory_iterator(path)) {
@@ -144,11 +144,11 @@ void Menu_StartChoosing() {
 
                 #ifdef EXPERIMENTAL
                     if (contains(warnedExtentions, extention)) {
-                        //SDL_DrawImage(RENDERER, warning, 5, 10 + (40 * choosingIndex));
+                        SDL_DrawImage(RENDERER, warning, 25, 18 + (40 * choosingIndex));
                     }
                 #endif
                 
-                SDL_DrawText(RENDERER, ARIAL_25, 50, 20 + (40 * choosingIndex), textColor, entry.path().filename().c_str());
+                SDL_DrawText(RENDERER, ARIAL_25, 70, 20 + (40 * choosingIndex), textColor, entry.path().filename().c_str());
 
                 if (isWarningOnScreen) {
                     if (!configDarkMode) { // Display a dimmed background if on light mode

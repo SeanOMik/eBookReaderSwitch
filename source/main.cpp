@@ -22,7 +22,6 @@ extern "C" {
 
 SDL_Renderer* RENDERER;
 SDL_Window* WINDOW;
-//SDL_Surface* WINDOW_SURFACE;
 SDL_Event EVENT;
 TTF_Font *ARIAL, *ARIAL_35, *ARIAL_30, *ARIAL_27, *ARIAL_25, *ARIAL_20, *ARIAL_15;
 bool configDarkMode;
