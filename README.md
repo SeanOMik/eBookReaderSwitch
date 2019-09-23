@@ -14,8 +14,9 @@ This is a project I've recently just started working on again. Currently its usi
 
 ### TODO:
 * Fix some PDF crashes and all the other file extentions.
-* 2 pages side by side in landscape
-* Hardware lock to prevent accidental touches (maybe Vol- ?) (?)
+* 2 pages side by side in landscape.
+* Touch screen for going to next page.
+* Hardware lock to prevent accidental touches (maybe Vol- ?) (?).
 
 ### Screen Shots:
 
@@ -24,12 +25,12 @@ Dark Mode Help Menu:
 <img src="screenshots/darkModeHelp.jpg" width="322" height="178.4">
 <br></br>
 
-Dark Mode Landscape Reading:
+Dark Mode Landscape Reading (With the Switch horizonal):
 <br></br>
 <img src="screenshots/darkModeLandscape.jpg" width="512" height="288">
 <br></br>
 
-Dark Mode Portrait Reading:
+Dark Mode Portrait Reading (With the Switch vertical):
 <br></br>
 <img src="screenshots/darkModePortrait.jpg" width="285.6" height="408.8">
 <br></br>
