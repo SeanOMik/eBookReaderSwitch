@@ -1,7 +1,6 @@
 #include "BookReader.hpp"
 #include "PageLayout.hpp"
 #include "LandscapePageLayout.hpp"
-#include "common.h"
 #include <algorithm>
 #include <iostream>
 #include <libconfig.h>
@@ -10,6 +9,8 @@ extern "C"  {
     #include "SDL_helper.h"
     #include "status_bar.h"
     #include "config.h"
+    #include "textures.h"
+    #include "common.h"
 }
 
 fz_context *ctx = NULL;
@@ -147,6 +148,7 @@ void BookReader::draw(bool drawHelp) {
     if (drawHelp) { // Help menu
         int helpWidth = 680;
         int helpHeight = 365;
+        helpHeight -= 38; // Removed due to removing the skip forward page button prompt.
 
         if (!configDarkMode) { // Display a dimmed background if on light mode
             SDL_DrawRect(RENDERER, 0, 0, 1280, 720, SDL_MakeColour(50, 50, 50, 150));
@@ -154,39 +156,39 @@ void BookReader::draw(bool drawHelp) {
 
         SDL_DrawRect(RENDERER, (windowX - helpWidth) / 2, (windowY - helpHeight) / 2, helpWidth, helpHeight, configDarkMode ? HINT_COLOUR_DARK : HINT_COLOUR_LIGHT);
 
-        // These already have margin added to them
         int textX = (windowX - helpWidth) / 2 + 20;
-        int textY = (windowY - helpHeight) / 2 + 75;
-        SDL_DrawText(RENDERER, ARIAL_30, textX, (windowY - helpHeight) / 2 + 10, configDarkMode ? WHITE : BLACK, "Help Menu:");
+        int textY = (windowY - helpHeight) / 2 + 87;
+        SDL_Color textColor = configDarkMode ? WHITE : BLACK;
+        SDL_DrawText(RENDERER, ROBOTO_30, textX, (windowY - helpHeight) / 2 + 10, textColor, "Help Menu:");
 
-        SDL_DrawText(RENDERER, ARIAL_25, textX, textY, configDarkMode ? WHITE : BLACK, "\"B\" - Stop reading / Close help menu.");
-        SDL_DrawText(RENDERER, ARIAL_25, textX, textY + 35, configDarkMode ? WHITE : BLACK, "\"-\" - Switch to dark/light theme.");
-        SDL_DrawText(RENDERER, ARIAL_25, textX, textY + 35 * 2, configDarkMode ? WHITE : BLACK, "\"Right Stick Up/Down\" - Zoom in/out.");
-        SDL_DrawText(RENDERER, ARIAL_25, textX, textY + 35 * 3, configDarkMode ? WHITE : BLACK, "\"Left Stick Up/Down\" - Page up/down.");
-        SDL_DrawText(RENDERER, ARIAL_25, textX, textY + 35 * 4, configDarkMode ? WHITE : BLACK, "\"Y\" - Rotate page.");
-        SDL_DrawText(RENDERER, ARIAL_25, textX, textY + 35 * 5, configDarkMode ? WHITE : BLACK, "\"X\" - Keep status bar on.");
-        SDL_DrawText(RENDERER, ARIAL_25, textX, textY + 35 * 6, configDarkMode ? WHITE : BLACK, "\"Left/Right DPad\" - Next/previous page.");
-        SDL_DrawText(RENDERER, ARIAL_25, textX, textY + 35 * 7, configDarkMode ? WHITE : BLACK, "\"Left/Right Bumper\" - Skip forward/backward 10 pages.");
+        SDL_DrawButtonPrompt(RENDERER, button_b,               ROBOTO_25, textColor, "Stop reading / Close help menu.", textX, textY,          35, 35, 5, 0);
+        SDL_DrawButtonPrompt(RENDERER, button_minus,           ROBOTO_25, textColor, "Switch to dark/light theme.",     textX, textY + 38,     35, 35, 5, 0);
+        SDL_DrawButtonPrompt(RENDERER, right_stick_up_down,    ROBOTO_25, textColor, "Zoom in/out.",                    textX, textY + 38 * 2, 35, 35, 5, 0);
+        SDL_DrawButtonPrompt(RENDERER, left_stick_up_down,     ROBOTO_25, textColor, "Page up/down.",                   textX, textY + 38 * 3, 35, 35, 5, 0);
+        SDL_DrawButtonPrompt(RENDERER, button_y,               ROBOTO_25, textColor, "Rotate page.",                    textX, textY + 38 * 4, 35, 35, 5, 0);
+        SDL_DrawButtonPrompt(RENDERER, button_x,               ROBOTO_25, textColor, "Keep status bar on.",             textX, textY + 38 * 5, 35, 35, 5, 0);
+        SDL_DrawButtonPrompt(RENDERER, button_dpad_left_right, ROBOTO_25, textColor, "Next/previous page.",             textX, textY + 38 * 6, 35, 35, 5, 0);
+        //SDL_DrawButtonPrompt(RENDERER, button_dpad_up_down,    ROBOTO_25, textColor, "Skip forward/backward 10 pages.", textX, textY + 38 * 7, 35, 35, 5, 0);
     }
 
     if (permStatusBar || --status_bar_visible_counter > 0)  {
         char *title = layout->info();
         
         int title_width = 0, title_height = 0;
-        TTF_SizeText(ARIAL_15, title, &title_width, &title_height);
+        TTF_SizeText(ROBOTO_15, title, &title_width, &title_height);
         
         SDL_Color color = configDarkMode ? STATUS_BAR_DARK : STATUS_BAR_LIGHT;
         
         if (_currentPageLayout == BookPageLayoutPortrait) {
             SDL_DrawRect(RENDERER, 0, 0, 1280, 45, SDL_MakeColour(color.r, color.g, color.b , 180));
-            SDL_DrawText(RENDERER, ARIAL_25, (1280 - title_width) / 2, (40 - title_height) / 2, WHITE, title);
+            SDL_DrawText(RENDERER, ROBOTO_25, (1280 - title_width) / 2, (40 - title_height) / 2, WHITE, title);
             
             StatusBar_DisplayTime(false);
         } else if (_currentPageLayout == BookPageLayoutLandscape) {
             SDL_DrawRect(RENDERER, 1280 - 45, 0, 45, 720, SDL_MakeColour(color.r, color.g, color.b , 180));
             int x = (1280 - title_width) - ((40 - title_height) / 2);
             int y = (720 - title_height) / 2;
-            SDL_DrawRotatedText(RENDERER, ARIAL_25, (double) 90, x, y, WHITE, title);
+            SDL_DrawRotatedText(RENDERER, ROBOTO_25, (double) 90, x, y, WHITE, title);
 
             StatusBar_DisplayTime(true);
         }

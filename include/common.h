@@ -8,6 +8,6 @@
 extern SDL_Window *WINDOW;
 //extern SDL_Surface *WINDOW_SURFACE;
 extern SDL_Renderer *RENDERER;
-extern TTF_Font *ARIAL, *ARIAL_35, *ARIAL_30, *ARIAL_27, *ARIAL_25, *ARIAL_20, *ARIAL_15;
+extern TTF_Font *ROBOTO_35, *ROBOTO_30, *ROBOTO_27, *ROBOTO_25, *ROBOTO_20, *ROBOTO_15;
 
 #endif

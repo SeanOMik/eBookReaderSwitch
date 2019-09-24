@@ -22,7 +22,7 @@ template <typename T> bool contains(list<T> & listOfElements, const T & element)
 	return it != listOfElements.end();
 }
 
-extern TTF_Font *ARIAL, *ARIAL_35, *ARIAL_25, *ARIAL_15;
+extern TTF_Font *ROBOTO_35, *ROBOTO_25, *ROBOTO_15;
 
 void Menu_StartChoosing() {
     int choosenIndex = 0;
@@ -129,8 +129,13 @@ void Menu_StartChoosing() {
             configDarkMode = !configDarkMode;
         }
 
-        SDL_DrawText(RENDERER, ARIAL_25, windowX - 123, windowY - 45, textColor, "\"B\" - Exit");
-        SDL_DrawText(RENDERER, ARIAL_25, windowX - 200, windowY - 80, textColor, "\"-\" - Switch theme");
+        int exitWidth = 0;
+        TTF_SizeText(ROBOTO_20, "Exit", &exitWidth, NULL);
+        SDL_DrawButtonPrompt(RENDERER, button_b, ROBOTO_20, textColor, "Exit", windowX - exitWidth - 50, windowY - 10, 35, 35, 5, 0);
+
+        int themeWidth = 0;
+        TTF_SizeText(ROBOTO_20, "Switch Theme", &themeWidth, NULL);
+        SDL_DrawButtonPrompt(RENDERER, button_minus, ROBOTO_20, textColor, "Switch Theme", windowX - themeWidth - 50, windowY - 40, 35, 35, 5, 0);
 
         int choosingIndex = 0;
         for (const auto & entry : fs::directory_iterator(path)) {
@@ -142,13 +147,11 @@ void Menu_StartChoosing() {
                     SDL_DrawRect(RENDERER, 15, 15 + (40 * choosingIndex), 1265, 40, configDarkMode ? SELECTOR_COLOUR_DARK : SELECTOR_COLOUR_LIGHT);
                 }
 
-                #ifdef EXPERIMENTAL
-                    if (contains(warnedExtentions, extention)) {
-                        SDL_DrawImage(RENDERER, warning, 25, 18 + (40 * choosingIndex));
-                    }
-                #endif
+                if (contains(warnedExtentions, extention)) {
+                    SDL_DrawImage(RENDERER, warning, 25, 18 + (40 * choosingIndex));
+                }
                 
-                SDL_DrawText(RENDERER, ARIAL_25, 70, 20 + (40 * choosingIndex), textColor, entry.path().filename().c_str());
+                SDL_DrawText(RENDERER, ROBOTO_25, 70, 20 + (40 * choosingIndex), textColor, entry.path().filename().c_str());
 
                 if (isWarningOnScreen) {
                     if (!configDarkMode) { // Display a dimmed background if on light mode
@@ -156,10 +159,10 @@ void Menu_StartChoosing() {
                     }
 
                     SDL_DrawRect(RENDERER, (windowX - warningWidth) / 2, (windowY - warningHeight) / 2, warningWidth, warningHeight, configDarkMode ? HINT_COLOUR_DARK : HINT_COLOUR_LIGHT);
-                    SDL_DrawText(RENDERER, ARIAL_30, (windowX - warningWidth) / 2 + 15, (windowY - warningHeight) / 2 + 15, textColor, "This file is not yet fully supported, and may");
-                    SDL_DrawText(RENDERER, ARIAL_30, (windowX - warningWidth) / 2 + 15, (windowY - warningHeight) / 2 + 50, textColor, "cause a system, or app crash.");
-                    SDL_DrawText(RENDERER, ARIAL_20, (windowX - warningWidth) / 2 + warningWidth - 250, (windowY - warningHeight) / 2 + warningHeight - 30, textColor, "\"A\" - Read");
-                    SDL_DrawText(RENDERER, ARIAL_20, (windowX - warningWidth) / 2 + warningWidth - 125, (windowY - warningHeight) / 2 + warningHeight - 30, textColor, "\"B\" - Cancel.");
+                    SDL_DrawText(RENDERER, ROBOTO_30, (windowX - warningWidth) / 2 + 15, (windowY - warningHeight) / 2 + 15, textColor, "This file is not yet fully supported, and may");
+                    SDL_DrawText(RENDERER, ROBOTO_30, (windowX - warningWidth) / 2 + 15, (windowY - warningHeight) / 2 + 50, textColor, "cause a system, or app crash.");
+                    SDL_DrawText(RENDERER, ROBOTO_20, (windowX - warningWidth) / 2 + warningWidth - 250, (windowY - warningHeight) / 2 + warningHeight - 30, textColor, "\"A\" - Read");
+                    SDL_DrawText(RENDERER, ROBOTO_20, (windowX - warningWidth) / 2 + warningWidth - 125, (windowY - warningHeight) / 2 + warningHeight - 30, textColor, "\"B\" - Cancel.");
                 }
 
                 choosingIndex++;

@@ -23,7 +23,7 @@ extern "C" {
 SDL_Renderer* RENDERER;
 SDL_Window* WINDOW;
 SDL_Event EVENT;
-TTF_Font *ARIAL, *ARIAL_35, *ARIAL_30, *ARIAL_27, *ARIAL_25, *ARIAL_20, *ARIAL_15;
+TTF_Font *ROBOTO_35, *ROBOTO_30, *ROBOTO_27, *ROBOTO_25, *ROBOTO_20, *ROBOTO_15;
 bool configDarkMode;
 bool run = true;
 
@@ -32,13 +32,12 @@ void Term_Services() {
     run = false;
 
     timeExit();
-    TTF_CloseFont(ARIAL_35);
-    TTF_CloseFont(ARIAL_30);
-    TTF_CloseFont(ARIAL_27);
-    TTF_CloseFont(ARIAL_25);
-    TTF_CloseFont(ARIAL_20);
-    TTF_CloseFont(ARIAL_15);
-    TTF_CloseFont(ARIAL);
+    TTF_CloseFont(ROBOTO_35);
+    TTF_CloseFont(ROBOTO_30);
+    TTF_CloseFont(ROBOTO_27);
+    TTF_CloseFont(ROBOTO_25);
+    TTF_CloseFont(ROBOTO_20);
+    TTF_CloseFont(ROBOTO_15);
     TTF_Quit();
 
     Textures_Free();
@@ -96,19 +95,16 @@ void Init_Services() {
     }
     std::cout << "Initalized TTF" << std::endl;
 
-    #ifdef EXPERIMENTAL
-        std::cout << "Loading Textures" << std::endl;
-        Textures_Load();
-    #endif
+    Textures_Load();
+    std::cout << "Loaded Textures" << std::endl;
 
-    ARIAL_35 = TTF_OpenFont("romfs:/resources/font/arial.ttf", 35);
-    ARIAL_30 = TTF_OpenFont("romfs:/resources/font/arial.ttf", 30);
-    ARIAL_27 = TTF_OpenFont("romfs:/resources/font/arial.ttf", 27);
-    ARIAL_25 = TTF_OpenFont("romfs:/resources/font/arial.ttf", 25);
-    ARIAL_20 = TTF_OpenFont("romfs:/resources/font/arial.ttf", 20);
-    ARIAL_15 = TTF_OpenFont("romfs:/resources/font/arial.ttf", 15);
-    ARIAL = TTF_OpenFont("romfs:/resources/font/arial.ttf", 20);
-    if (!ARIAL_35 || !ARIAL_25 || !ARIAL_15 || !ARIAL) {
+    ROBOTO_35 = TTF_OpenFont("romfs:/resources/font/Roboto-Light.ttf", 35);
+    ROBOTO_30 = TTF_OpenFont("romfs:/resources/font/Roboto-Light.ttf", 30);
+    ROBOTO_27 = TTF_OpenFont("romfs:/resources/font/Roboto-Light.ttf", 27);
+    ROBOTO_25 = TTF_OpenFont("romfs:/resources/font/Roboto-Light.ttf", 25);
+    ROBOTO_20 = TTF_OpenFont("romfs:/resources/font/Roboto-Light.ttf", 20);
+    ROBOTO_15 = TTF_OpenFont("romfs:/resources/font/Roboto-Light.ttf", 15);
+    if (!ROBOTO_35 || !ROBOTO_25 || !ROBOTO_15) {
         std::cout << "Failure to retrieve fonts" << std::endl;
         Term_Services();
     }
@@ -131,7 +127,9 @@ void Init_Services() {
 int main(int argc, char *argv[]) {
     Init_Services();
 
-    Menu_StartChoosing();
+    if (run) {
+        Menu_StartChoosing();
+    }
 
     Term_Services();
     return 0;

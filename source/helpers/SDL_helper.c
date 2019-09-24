@@ -88,3 +88,20 @@ void SDL_DrawImageScale(SDL_Renderer *renderer, SDL_Texture *texture, int x, int
 	position.x = x; position.y = y; position.w = w; position.h = h;
 	SDL_RenderCopy(renderer, texture, NULL, &position);
 }
+
+void SDL_DrawButtonPrompt(SDL_Renderer *renderer, SDL_Texture *texture, TTF_Font *font, SDL_Color textColor, const char* text, int x, int y, int imageW, int imageH, int imageDistance, int yTextOffset) {
+	int textWidth, textHeight;
+    TTF_SizeText(ROBOTO_20, text, &textWidth, &textHeight);
+
+	int imageX = x;
+	int imageY = y - imageH;
+    SDL_DrawImageScale(RENDERER, texture, imageX, imageY, imageW, imageH);
+
+	int textX = x + imageDistance + imageW;
+	int textY = y - (imageH * 0.85) - yTextOffset; // 0.85 was retreived from trail and error when trying to center the text with the image.
+    SDL_DrawText(RENDERER, ROBOTO_20, textX, textY, textColor, text);
+}
+
+void SDL_DrawHorizonalAlignedImageText (SDL_Renderer *renderer, SDL_Texture *texture, TTF_Font *font, SDL_Color textColor, const char* text, int x, int y, int imageW, int imageH, int imageDistance, int yTextOffset) {
+	SDL_DrawButtonPrompt(renderer, texture, font, textColor, text, x, y, imageW, imageH, imageDistance, yTextOffset);
+}
