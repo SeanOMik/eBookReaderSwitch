@@ -47,9 +47,9 @@ static void save_last_page(const char *book_name, int current_page) {
     }
 }
 
-BookReader::BookReader(const char *path) {
+BookReader::BookReader(const char *path, int* result) {
     if (ctx == NULL) {
-        ctx = fz_new_context(NULL, NULL, 128 << 10);
+        ctx = fz_new_context(NULL, NULL, FZ_STORE_UNLIMITED);
         fz_register_document_handlers(ctx);
     }
 
@@ -62,15 +62,34 @@ BookReader::BookReader(const char *path) {
         book_name.erase(std::remove(book_name.begin(), book_name.end(), c), book_name.end());
     }
     
-    std::cout << "fz_open_document" << std::endl;
-    doc = fz_open_document(ctx, path);
-    
-    int current_page = load_last_page(book_name.c_str());
-    //int current_page = 0;
-    switch_current_page_layout(_currentPageLayout, current_page);
-    
-    if (current_page > 0) {
-        show_status_bar();
+    fz_try(ctx)	{
+        std::cout << "fz_open_document" << std::endl;
+        doc = fz_open_document(ctx, path);
+
+        if (!doc)
+        {
+            std::cout << "Error opening file!" << std::endl;
+            *result = -1;
+            return;
+        }
+        
+        std::cout << "doc opened ok ?!" << std::endl;
+        
+        int current_page = load_last_page(book_name.c_str());
+        //int current_page = 0;
+
+        std::cout << "current_page = " << current_page << std::endl;
+
+        switch_current_page_layout(_currentPageLayout, current_page);
+
+        if (current_page > 0) {
+            show_status_bar();
+        }
+    }
+    fz_catch(ctx){
+        std::cout << "fz_catch reached, closing gracefully" << std::endl;
+        *result = -2;
+        return;
     }
 }
 
@@ -135,6 +154,7 @@ void BookReader::switch_page_layout() {
 }
 
 void BookReader::draw(bool drawHelp) {
+    //std::cout << "BookReader::draw" << std::endl;
     if (configDarkMode == true) {
         SDL_ClearScreen(RENDERER, BLACK);
     } else {
@@ -203,6 +223,8 @@ void BookReader::show_status_bar() {
 }
 
 void BookReader::switch_current_page_layout(BookPageLayout bookPageLayout, int current_page) {
+    std::cout << "enter switch_current_page_layout " << std::endl;
+
     if (layout) {
         current_page = layout->current_page();
         delete layout;
@@ -219,4 +241,6 @@ void BookReader::switch_current_page_layout(BookPageLayout bookPageLayout, int c
             layout = new LandscapePageLayout(doc, current_page);
             break;
     }
+
+    std::cout << "exit switch_current_page_layout " << std::endl;
 }

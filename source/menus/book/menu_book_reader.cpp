@@ -10,14 +10,21 @@ extern "C" {
 #include "BookReader.hpp"
 
 void Menu_OpenBook(char *path) {
-    BookReader *reader = new BookReader(path);
+    BookReader *reader = NULL;
+    int result = 0;
+
+    reader = new BookReader(path, &result);
+    
+    if(result < 0){
+        std::cout << "Menu_OpenBook: document not loaded" << std::endl;
+    }
     
     /*TouchInfo touchInfo;
     Touch_Init(&touchInfo);*/
     
     bool helpMenu = false;
     
-    while(appletMainLoop()) {
+    while(result >= 0 && appletMainLoop()) {
         reader->draw(helpMenu);
         
         hidScanInput();

@@ -14,7 +14,7 @@ typedef enum {
 
 class BookReader {
     public:
-        BookReader(const char *path);
+        BookReader(const char *path, int *result);
         ~BookReader();
 
         bool permStatusBar = false;
