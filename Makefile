@@ -74,7 +74,7 @@ LIBS    :=  -lstdc++fs -lSDL2_ttf -lSDL2_image -lpng -ljpeg `sdl2-config --libs`
 # list of directories containing libraries, this must be the top level containing
 # include and lib
 #---------------------------------------------------------------------------------
-LIBDIRS	:= $(PORTLIBS) $(LIBNX)
+LIBDIRS	:= $(PORTLIBS) $(LIBNX) $(CURDIR)/mupdf
 
 #---------------------------------------------------------------------------------
 # no real need to edit anything past this point unless you need to add additional
@@ -163,7 +163,7 @@ ifneq ($(ROMFS),)
 	export NROFLAGS += --romfsdir=$(CURDIR)/$(ROMFS)
 endif
 
-.PHONY: $(BUILD) clean all
+.PHONY: $(BUILD) clean all mupdf
 
 #---------------------------------------------------------------------------------
 all: $(BUILD)
@@ -181,6 +181,14 @@ else
 	@rm -fr $(BUILD) $(TARGET).nsp $(TARGET).nso $(TARGET).npdm $(TARGET).elf
 endif
 
+#---------------------------------------------------------------------------------
+mupdf-clean:
+	@echo cleaning mupdf ...
+	@$(MAKE) -C $(CURDIR)/mupdf clean
+
+#---------------------------------------------------------------------------------
+mupdf:
+	@$(MAKE) -f $(CURDIR)/Makefile.mupdf
 
 #---------------------------------------------------------------------------------
 else
