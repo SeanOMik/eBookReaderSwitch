@@ -1,0 +1,64 @@
+#---------------------------------------------------------------------------------
+.SUFFIXES:
+#---------------------------------------------------------------------------------
+
+ifeq ($(strip $(DEVKITPRO)),)
+$(error "Please set DEVKITPRO in your environment. export DEVKITPRO=<path to>/devkitpro")
+endif
+
+TOPDIR ?= $(CURDIR)
+include $(DEVKITPRO)/libnx/switch_rules
+
+TOOL_PREFIX ?= aarch64-none-elf-
+
+#---------------------------------------------------------------------------------
+# options for code generation
+#---------------------------------------------------------------------------------
+ARCH	:=	-march=armv8-a+crc+crypto -mtune=cortex-a57 -mtp=soft -fPIE
+
+CFLAGS	:=	-g -O2 -ffunction-sections \
+			$(ARCH) $(DEFINES)
+
+CFLAGS	+=	-D__SWITCH__ $(INCLUDE) `sdl2-config --cflags`
+
+CXXFLAGS	:= $(CFLAGS) -fno-rtti -fno-exceptions -DDEBUG=1 -DTOFU_NOTO= -DTOFU_CJK=
+
+ASFLAGS	:=	-g $(ARCH)
+LDFLAGS	=	-specs=$(DEVKITPRO)/libnx/switch.specs -g $(ARCH) -Wl,-Map,$(notdir $*.map)
+
+#---------------------------------------------------------------------------------
+# list of directories containing libraries, this must be the top level containing
+# include and lib
+#---------------------------------------------------------------------------------
+LIBDIRS	:= $(PORTLIBS) $(LIBNX)
+
+export INCLUDE	:=	$(foreach dir,$(INCLUDES),-I$(CURDIR)/$(dir)) \
+			$(foreach dir,$(LIBDIRS),-I$(dir)/include) \
+			-I$(CURDIR)/$(BUILD)
+
+#---------------------------------------------------------------------------------
+.PHONY: mupdf
+
+#---------------------------------------------------------------------------------
+mupdf:
+	@echo Building mupdf ...
+	@$(shell ./opt/devkitpro/switchvars.sh $<)
+	$(MAKE) -e -C mupdf \
+  CC=${TOOL_PREFIX}gcc \
+  CXX=${TOOL_PREFIX}g++ \
+  LD=${TOOL_PREFIX}ld \
+  AR=${TOOL_PREFIX}ar \
+  RANLIB=${TOOL_PREFIX}ranlib \
+  XCFLAGS="${CPPFLAGS} ${CFLAGS}" \
+  USE_SYSTEM_FREETYPE=yes \
+  USE_SYSTEM_HARFBUZZ=no \
+  USE_SYSTEM_JBIG2DEC=no \
+  USE_SYSTEM_JPEGXR=no \
+  USE_SYSTEM_LCMS2=no \
+  USE_SYSTEM_LIBJPEG=yes \
+  USE_SYSTEM_MUJS=no \
+  USE_SYSTEM_OPENJPEG=no \
+  USE_SYSTEM_ZLIB=no \
+  libs
+	@mkdir -p mupdf/lib
+	@cp -f mupdf/build/release/*.a mupdf/lib

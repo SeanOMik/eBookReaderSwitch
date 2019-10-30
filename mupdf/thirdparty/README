@@ -1,0 +1,18 @@
+This directory holds third party libraries as git subtrees
+
+If the directories are empty, the makefile based build will try
+to use system libraries instead.
+
+The third party modules should be already here, but here is a
+reference to where they came from:
+
+git subtree add --prefix=thirdparty/jbig2dec https://github.com/ArtifexSoftware/jbig2dec.git jbig2dec-0.17 --squash
+git subtree add --prefix=thirdparty/mujs https://github.com/ArtifexSoftware/mujs.git 1.0.6 --squash
+git subtree add --prefix=thirdparty/freetype https://github.com/ArtifexSoftware/thirdparty-freetype2.git VER-2-10-0-mupdf-2 --squash
+git subtree add --prefix=thirdparty/harfbuzz https://github.com/ArtifexSoftware/thirdparty-harfbuzz.git 1.9.0 --squash
+git subtree add --prefix=thirdparty/libjpeg https://github.com/ArtifexSoftware/thirdparty-libjpeg.git artifex --squash
+git subtree add --prefix=thirdparty/lcms2 https://github.com/ArtifexSoftware/thirdparty-lcms2.git lcms2mt --squash
+git subtree add --prefix=thirdparty/openjpeg https://github.com/ArtifexSoftware/thirdparty-openjpeg.git master --squash
+git subtree add --prefix=thirdparty/zlib https://github.com/ArtifexSoftware/thirdparty-zlib.git 1.2.11 --squash
+git subtree add --prefix=thirdparty/curl https://github.com/ArtifexSoftware/thirdparty-curl.git artifex --squash
+git subtree add --prefix=thirdparty/freeglut https://github.com/ArtifexSoftware/thirdparty-freeglut.git master --squash

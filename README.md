@@ -10,13 +10,14 @@ This is a project I've recently just started working on again. Currently its usi
 * Portrait reading view
 
 ### Current State:
-* So far, only **MOST** of the PDF files I've tested works.
+* Most PDF files work, and all epub, cbz and xps files I've tested work.
 
 ### TODO:
-* Fix some PDF crashes and all the other file extentions.
+* Do some extra testing on file compatibility.
 * 2 pages side by side in landscape.
 * Touch screen for going to next page.
 * Hardware lock to prevent accidental touches (maybe Vol- ?) (?).
+* Save orientation, and dark mode settings.
 
 ### Screen Shots:
 
@@ -43,3 +44,16 @@ Dark Mode Book Selection:
 Light Mode Landscape Reading:
 <br></br>
 <img src="screenshots/lightModeLandscape.jpg" width="512" height="288">
+
+### Building
+* Release built with [libnx release v2.4.0](https://github.com/switchbrew/libnx).
+* Uses `freetype` and other libs which comes with `switch-portlibs` via `devkitPro pacman`:
+```
+pacman -S libnx switch-portlibs
+```
+then run:
+```
+make mupdf
+make
+```
+to build.
