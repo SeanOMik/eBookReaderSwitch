@@ -73,8 +73,6 @@ BookReader::BookReader(const char *path, int* result) {
             return;
         }
         
-        std::cout << "doc opened ok ?!" << std::endl;
-        
         int current_page = load_last_page(book_name.c_str());
         //int current_page = 0;
 
@@ -154,7 +152,6 @@ void BookReader::switch_page_layout() {
 }
 
 void BookReader::draw(bool drawHelp) {
-    //std::cout << "BookReader::draw" << std::endl;
     if (configDarkMode == true) {
         SDL_ClearScreen(RENDERER, BLACK);
     } else {
@@ -223,8 +220,6 @@ void BookReader::show_status_bar() {
 }
 
 void BookReader::switch_current_page_layout(BookPageLayout bookPageLayout, int current_page) {
-    std::cout << "enter switch_current_page_layout " << std::endl;
-
     if (layout) {
         current_page = layout->current_page();
         delete layout;
@@ -241,6 +236,4 @@ void BookReader::switch_current_page_layout(BookPageLayout bookPageLayout, int c
             layout = new LandscapePageLayout(doc, current_page);
             break;
     }
-
-    std::cout << "exit switch_current_page_layout " << std::endl;
 }
