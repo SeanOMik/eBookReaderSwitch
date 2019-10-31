@@ -45,6 +45,10 @@ Light Mode Landscape Reading:
 <br></br>
 <img src="screenshots/lightModeLandscape.jpg" width="512" height="288">
 
+### Credit:
+* moronigranja - For allowing more file support
+* NX-Shell Team - A good amount of the code is from an old version of their application.
+
 ### Building
 * Release built with [libnx release v2.4.0](https://github.com/switchbrew/libnx).
 * Uses `freetype` and other libs which comes with `switch-portlibs` via `devkitPro pacman`:
