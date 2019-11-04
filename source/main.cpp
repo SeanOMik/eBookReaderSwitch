@@ -16,6 +16,7 @@ extern "C" {
     #include "common.h"
     #include "textures.h"
     #include "MenuChooser.h"
+    #include "menu_book_reader.h"
     #include "fs.h"
     #include "config.h"
 }
@@ -25,11 +26,9 @@ SDL_Window* WINDOW;
 SDL_Event EVENT;
 TTF_Font *ROBOTO_35, *ROBOTO_30, *ROBOTO_27, *ROBOTO_25, *ROBOTO_20, *ROBOTO_15;
 bool configDarkMode;
-bool run = true;
 
 void Term_Services() {
     std::cout << "Terminate Serices" << std::endl;
-    run = false;
 
     timeExit();
     TTF_CloseFont(ROBOTO_35);
@@ -127,7 +126,9 @@ void Init_Services() {
 int main(int argc, char *argv[]) {
     Init_Services();
 
-    if (run) {
+    if (argc == 2) {
+        Menu_OpenBook(argv[1]);
+    } else {
         Menu_StartChoosing();
     }
 
