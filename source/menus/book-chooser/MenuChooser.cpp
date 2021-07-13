@@ -59,16 +59,25 @@ void Menu_StartChoosing() {
         SDL_ClearScreen(RENDERER, backColor);
 		SDL_RenderClear(RENDERER);
 
-        hidScanInput();
+        //hidScanInput();
+	padConfigureInput(1, HidNpadStyleSet_NpadStandard);
 
-        u64 kDown = hidKeysDown(CONTROLLER_P1_AUTO);
-        u64 kHeld = hidKeysHeld(CONTROLLER_P1_AUTO);
+	PadState pad;
+	padInitializeDefault(&pad);
+
+	padUpdate(&pad);
+
+        //u64 kDown = hidKeysDown(CONTROLLER_P1_AUTO);
+        //u64 kHeld = hidKeysHeld(CONTROLLER_P1_AUTO);
+
+	u64 kDown = padGetButtonsDown(&pad);
+	u64 kHeld = padGetButtons(&pad);
 
         /*if (!isWarningOnScreen && kDown & KEY_PLUS) {
             break;
         }*/
 
-        if (kDown & KEY_B) {
+        if (kDown & HidNpadButton_B) {
             if (!isWarningOnScreen) {
                 break;
             } else {
@@ -76,7 +85,7 @@ void Menu_StartChoosing() {
             }
         }
 
-        if (kDown & KEY_A) {
+        if (kDown & HidNpadButton_A) {
             int bookIndex = 0;
             for (const auto & entry : fs::directory_iterator(path)) {
                 string filename = entry.path().filename().string();
@@ -109,7 +118,7 @@ void Menu_StartChoosing() {
             }
         }
 
-        if (kDown & KEY_DUP) {
+        if (kDown & HidNpadButton_Up) {
             if (choosenIndex != 0 && !isWarningOnScreen) {
                 choosenIndex--;
             } else if (choosenIndex == 0) {
@@ -117,7 +126,7 @@ void Menu_StartChoosing() {
             }
         }
 
-        if (kDown & KEY_DDOWN) {
+        if (kDown & HidNpadButton_Down) {
             if (choosenIndex == amountOfFiles-1) {
                 choosenIndex = 0;
             } else if (choosenIndex < amountOfFiles-1 && !isWarningOnScreen) {
@@ -125,7 +134,7 @@ void Menu_StartChoosing() {
             }
         }
 
-        if (kDown & KEY_MINUS) {
+        if (kDown & HidNpadButton_Minus) {
             configDarkMode = !configDarkMode;
         }
 

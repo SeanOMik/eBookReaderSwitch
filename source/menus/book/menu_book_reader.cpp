@@ -24,75 +24,86 @@ void Menu_OpenBook(char *path) {
     
     bool helpMenu = false;
     
+    // Configure our supported input layout: a single player with standard controller syles
+    padConfigureInput(1, HidNpadStyleSet_NpadStandard);
+    // Initialize the default gamepad (which reads handheld mode inputs as well as the first connected controller)
+    PadState pad;
+    padInitializeDefault(&pad);
+    //Touch_Process(&touchInfo);
+
     while(result >= 0 && appletMainLoop()) {
         reader->draw(helpMenu);
         
-        hidScanInput();
-
-        //Touch_Process(&touchInfo);
-
-        u64 kDown = hidKeysDown(CONTROLLER_P1_AUTO);
-        u64 kHeld = hidKeysHeld(CONTROLLER_P1_AUTO);
+        //hidScanInput();
+	
+        //u64 kDown = hidKeysDown(CONTROLLER_P1_AUTO);
+        //u64 kHeld = hidKeysHeld(CONTROLLER_P1_AUTO);
         
-        if (!helpMenu && kDown & KEY_DLEFT) {
-            if (reader->currentPageLayout() == BookPageLayoutPortrait || (!hidGetHandheldMode())) {
+	padUpdate(&pad);
+
+	u64 kDown = padGetButtonsDown(&pad);
+	u64 kHeld = padGetButtons(&pad);	
+	u64 kUp = padGetButtonsUp(&pad);
+
+        if (!helpMenu && kDown & HidNpadButton_Left) {
+            if (reader->currentPageLayout() == BookPageLayoutPortrait ) {
                 reader->previous_page(1);
-            } else if ((reader->currentPageLayout() == BookPageLayoutLandscape) && (hidGetHandheldMode())) {
+            } else if ((reader->currentPageLayout() == BookPageLayoutLandscape) ) {
                 reader->zoom_out();
             }
-        } else if (!helpMenu && kDown & KEY_DRIGHT) {
-            if (reader->currentPageLayout() == BookPageLayoutPortrait || (!hidGetHandheldMode())) {
+        } else if (!helpMenu && kDown & HidNpadButton_Right) {
+            if (reader->currentPageLayout() == BookPageLayoutPortrait ) {
                 reader->next_page(1);
-            } else if ((reader->currentPageLayout() == BookPageLayoutLandscape) && (hidGetHandheldMode())) {
+            } else if ((reader->currentPageLayout() == BookPageLayoutLandscape) ) {
                 reader->zoom_in();
             }
         }
 
-        if (!helpMenu && kDown & KEY_R) {
+        if (!helpMenu && kDown & HidNpadButton_R) {
             reader->next_page(10);
-        } else if (!helpMenu && kDown & KEY_L) {
+        } else if (!helpMenu && kDown & HidNpadButton_L) {
             reader->previous_page(10);
         }
 
-        if (!helpMenu && ((kDown & KEY_DUP) || (kHeld & KEY_RSTICK_UP))) {
-            if (reader->currentPageLayout() == BookPageLayoutPortrait || (!hidGetHandheldMode())) {
+        if (!helpMenu && ((kDown & HidNpadButton_Up) || (kHeld & HidNpadButton_StickRUp))) {
+            if (reader->currentPageLayout() == BookPageLayoutPortrait ) {
                 reader->zoom_in();
-            } else if ((reader->currentPageLayout() == BookPageLayoutLandscape) && (hidGetHandheldMode())) {
+            } else if ((reader->currentPageLayout() == BookPageLayoutLandscape) ) {
                 reader->previous_page(1);
             }
-        } else if (!helpMenu && ((kDown & KEY_DDOWN) || (kHeld & KEY_RSTICK_DOWN))) {
-            if (reader->currentPageLayout() == BookPageLayoutPortrait || (!hidGetHandheldMode())) {
+        } else if (!helpMenu && ((kDown & HidNpadButton_Down) || (kHeld & HidNpadButton_StickRDown))) {
+            if (reader->currentPageLayout() == BookPageLayoutPortrait ) {
                 reader->zoom_out();
-            } else if ((reader->currentPageLayout() == BookPageLayoutLandscape) && (hidGetHandheldMode())) {
+            } else if ((reader->currentPageLayout() == BookPageLayoutLandscape) ) {
                 reader->next_page(1);
             }
         }
 
-        if (!helpMenu && kHeld & KEY_LSTICK_UP) {
-            if (reader->currentPageLayout() == BookPageLayoutPortrait || (!hidGetHandheldMode())) {
+        if (!helpMenu && kHeld & HidNpadButton_StickLUp) {
+            if (reader->currentPageLayout() == BookPageLayoutPortrait ) {
                 reader->move_page_up();
-            } else if ((reader->currentPageLayout() == BookPageLayoutLandscape) && (hidGetHandheldMode())) {
+            } else if ((reader->currentPageLayout() == BookPageLayoutLandscape) ) {
                 reader->move_page_left();
             }
-        } else if (!helpMenu && kHeld & KEY_LSTICK_DOWN) {
-            if (reader->currentPageLayout() == BookPageLayoutPortrait || (!hidGetHandheldMode())) {
+        } else if (!helpMenu && kHeld & HidNpadButton_StickLDown) {
+            if (reader->currentPageLayout() == BookPageLayoutPortrait ) {
                 reader->move_page_down();
-            } else if ((reader->currentPageLayout() == BookPageLayoutLandscape) && (hidGetHandheldMode())) {
+            } else if ((reader->currentPageLayout() == BookPageLayoutLandscape) ) {
                 reader->move_page_right();
             }
-        } else if (!helpMenu && kHeld & KEY_LSTICK_RIGHT) {
-            if ((reader->currentPageLayout() == BookPageLayoutLandscape) && (hidGetHandheldMode())) {
+        } else if (!helpMenu && kHeld & HidNpadButton_StickLRight) {
+            if ((reader->currentPageLayout() == BookPageLayoutLandscape) ) {
                 //reader->move_page_up();
                 reader->move_page_down();
             }
-        } else if (!helpMenu && kHeld & KEY_LSTICK_LEFT) {
-            if ((reader->currentPageLayout() == BookPageLayoutLandscape) && (hidGetHandheldMode())) {
+        } else if (!helpMenu && kHeld & HidNpadButton_StickLLeft) {
+            if ((reader->currentPageLayout() == BookPageLayoutLandscape) ) {
                 //reader->move_page_down();
                 reader->move_page_up();
             }
         }
 
-        if (kDown & KEY_B) {
+        if (kDown & HidNpadButton_B) {
             if (helpMenu) {
                 helpMenu = !helpMenu;
             } else {
@@ -100,27 +111,27 @@ void Menu_OpenBook(char *path) {
             }
         }
 
-        if (!helpMenu && kDown & KEY_X) {
+        if (!helpMenu && kDown & HidNpadButton_X) {
             reader->permStatusBar = !reader->permStatusBar;
         }
             
-        if (!helpMenu && kDown & KEY_LSTICK || kDown & KEY_RSTICK) {
+        if (!helpMenu && kDown & HidNpadButton_StickL || kDown & HidNpadButton_StickR) {
             reader->reset_page();
         }
         
-        if (!helpMenu && kDown & KEY_Y) {
+        if (!helpMenu && kDown & HidNpadButton_Y) {
             reader->switch_page_layout();
         }
 
-        if (!helpMenu && kDown & KEY_MINUS) {
+        if (!helpMenu && kUp & HidNpadButton_Minus) {
             configDarkMode = !configDarkMode;
             reader->previous_page(0);
         }
 
-        if (kDown & KEY_PLUS) {
+        if (kDown & HidNpadButton_Plus) {
             helpMenu = !helpMenu;
         }
-        
+ 
         /*if (touchInfo.state == TouchEnded && touchInfo.tapType != TapNone) {
             float tapRegion = 120;
             

@@ -50,7 +50,7 @@ Light Mode Landscape Reading:
 * NX-Shell Team - A good amount of the code is from an old version of their application.
 
 ### Building
-* Release built with [libnx release v2.4.0](https://github.com/switchbrew/libnx).
+* Release built with [libnx release v.4.1.3](https://github.com/switchbrew/libnx).
 * Uses `freetype` and other libs which comes with `switch-portlibs` via `devkitPro pacman`:
 ```
 pacman -S libnx switch-portlibs
@@ -61,3 +61,8 @@ make mupdf
 make
 ```
 to build.
+
+If you don't have twili debugger installed then delete the -ltwili flag on the Makefile to compile:
+```
+LIBS: -ltwili
+```
