@@ -62,7 +62,7 @@ make
 ```
 to build.
 
-if you don't have twili installed then delete the -ltwili flag on:
+* If you don't have twili debugger installed then delete the -ltwili flag on the Makefile to compile:
 ```
 LIBS: -ltwili
 ```
