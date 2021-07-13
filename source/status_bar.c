@@ -33,7 +33,8 @@ static char *Clock_GetCurrentTime(void) {
 
 static void StatusBar_GetBatteryStatus(int x, int y) {
 	u32 percent = 0;
-	ChargerType state;
+	//ChargerType state;
+	PsmChargerType state;
 	int width = 0;
 	char buf[5];
 

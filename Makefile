@@ -45,8 +45,8 @@ INCLUDES    :=  include include/menus/book include/menus/book-chooser include/he
 ROMFS	    :=	romfs
 
 VERSION_MAJOR := 0
-VERSION_MINOR := 2
-VERSION_MICRO := 2
+VERSION_MINOR := 3
+VERSION_MICRO := 0
 
 APP_TITLE   := eBookReader
 APP_AUTHOR  := SeanOMik
