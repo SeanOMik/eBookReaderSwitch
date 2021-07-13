@@ -61,3 +61,8 @@ make mupdf
 make
 ```
 to build.
+
+if you don't have twili installed then delete the -ltwili flag on:
+```
+LIBS: -ltwili
+```
