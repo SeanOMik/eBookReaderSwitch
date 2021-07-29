@@ -1,18 +1,13 @@
 # eBookReaderSwitch
 
-This is a project I've recently just started working on again. Currently its using MuPDF as its backend. Currently only most pdf files work.
-
 ### Features:
 * Saves last page number
-* Reads PDF files
+* Reads PDF, EPUB, CBZ, and XPS files
 * Dark and light mode
 * Landscape reading view
 * Portrait reading view
 * Touch screen controls
 	* Touch the botton/top of the screen to zoom in/out and left and right to change the page.
-
-### Current State:
-* Most PDF files work, and all epub, cbz and xps files I've tested work.
 
 ### TODO:
 * Do some extra testing on file compatibility.
