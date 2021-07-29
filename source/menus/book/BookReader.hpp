@@ -4,7 +4,7 @@
 #include <mupdf/pdf.h>
 #include <string>
 #include "PageLayout.hpp"
-
+#include <switch.h>
 struct SDL_Texture;
 
 typedef enum {

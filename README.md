@@ -8,6 +8,8 @@ This is a project I've recently just started working on again. Currently its usi
 * Dark and light mode
 * Landscape reading view
 * Portrait reading view
+* Touch screen controls
+	* Touch the botton/top of the screen to zoom in/out and left and right to change the page.
 
 ### Current State:
 * Most PDF files work, and all epub, cbz and xps files I've tested work.
@@ -15,7 +17,6 @@ This is a project I've recently just started working on again. Currently its usi
 ### TODO:
 * Do some extra testing on file compatibility.
 * 2 pages side by side in landscape.
-* Touch screen for going to next page.
 * Hardware lock to prevent accidental touches (maybe Vol- ?) (?).
 * Save orientation, and dark mode settings.
 
@@ -50,7 +51,7 @@ Light Mode Landscape Reading:
 * NX-Shell Team - A good amount of the code is from an old version of their application.
 
 ### Building
-* Release built with [libnx release v.4.1.3](https://github.com/switchbrew/libnx).
+* Release built with [libnx release v2.4.0](https://github.com/switchbrew/libnx).
 * Uses `freetype` and other libs which comes with `switch-portlibs` via `devkitPro pacman`:
 ```
 pacman -S libnx switch-portlibs
@@ -61,8 +62,3 @@ make mupdf
 make
 ```
 to build.
-
-If you don't have twili debugger installed then delete the -ltwili flag on the Makefile to compile:
-```
-LIBS: -ltwili
-```
