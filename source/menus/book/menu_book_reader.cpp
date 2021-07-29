@@ -47,29 +47,29 @@ void Menu_OpenBook(char *path) {
 	if(hidGetTouchScreenStates(&state, 1)) {
 		if(state.count != prev_touchcount) {
 			prev_touchcount = state.count;
-		}
+		} 
 	}
 
 	for(s32 i=0; i<state.count; i++) {
-		if (state.touches[i].x > 1000)
+		if (state.touches[i].x > 1000 && (state.touches[i].y > 200 && state.touches[i].y < 500))
 			if (reader->currentPageLayout() == BookPageLayoutPortrait)
 				reader->next_page(1);
 			else if (reader->currentPageLayout() == BookPageLayoutLandscape)
 				reader->zoom_in();
 
-		if (state.touches[i].x < 280)
+		if (state.touches[i].x < 280 && (state.touches[i].y > 200 && state.touches[i].y < 500))
 			if (reader->currentPageLayout() == BookPageLayoutPortrait)
 				reader->previous_page(1);
 			else if (reader->currentPageLayout() == BookPageLayoutLandscape)
 				reader->zoom_out();
 
-		if (state.touches[i].y < 200 && (state.touches[i].x > 280 || state.touches[i].x < 1000))
+		if (state.touches[i].y < 200)
 			if (reader->currentPageLayout() == BookPageLayoutPortrait)
 				reader->zoom_in();
 			else if (reader->currentPageLayout() == BookPageLayoutLandscape)
 				reader->previous_page(1);
 
-		if (state.touches[i].y > 500 && (state.touches[i].x > 280 || state.touches[i].x < 1000))
+		if (state.touches[i].y > 500)
 			if (reader->currentPageLayout() == BookPageLayoutPortrait)
 				reader->zoom_out();
 			else if (reader->currentPageLayout() == BookPageLayoutLandscape)
@@ -137,7 +137,7 @@ void Menu_OpenBook(char *path) {
 	else if (!helpMenu && kDown & HidNpadButton_LeftSL)
 		reader->previous_page(10);
 
-        if (kDown & HidNpadButton_B) {
+        if (kUp & HidNpadButton_B) {
             if (helpMenu) {
                 helpMenu = !helpMenu;
             } else {
@@ -191,4 +191,5 @@ void Menu_OpenBook(char *path) {
     std::cout << "Opening chooser" << std::endl;
     Menu_StartChoosing();
     delete reader;
+    // consoleExit(NULL);
 }
