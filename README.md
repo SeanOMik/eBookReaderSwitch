@@ -62,3 +62,8 @@ make mupdf
 make
 ```
 to build.
+
+If you don't have twili debugger installed, delete the `-ltwili` flag on the Makefile to compile:
+```
+LIBS: -ltwili
+```
