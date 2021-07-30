@@ -48,6 +48,12 @@ void Menu_StartChoosing() {
     SDL_GetWindowSize(WINDOW, &windowX, &windowY);
     int warningWidth = 700;
     int warningHeight = 300;
+
+    padConfigureInput(1, HidNpadStyleSet_NpadStandard);
+
+    PadState pad;
+    padInitializeDefault(&pad);
+
     while(appletMainLoop()) {
         if (readingBook) {
             break;
@@ -59,23 +65,15 @@ void Menu_StartChoosing() {
         SDL_ClearScreen(RENDERER, backColor);
 		SDL_RenderClear(RENDERER);
 
-        //hidScanInput();
-	padConfigureInput(1, HidNpadStyleSet_NpadStandard);
-
-	PadState pad;
-	padInitializeDefault(&pad);
-
 	padUpdate(&pad);
-
-        //u64 kDown = hidKeysDown(CONTROLLER_P1_AUTO);
-        //u64 kHeld = hidKeysHeld(CONTROLLER_P1_AUTO);
 
 	u64 kDown = padGetButtonsDown(&pad);
 	u64 kHeld = padGetButtons(&pad);
+	u64 kUp = padGetButtonsUp(&pad);
 
-        /*if (!isWarningOnScreen && kDown & KEY_PLUS) {
+        if (!isWarningOnScreen && kDown & HidNpadButton_Plus) {
             break;
-        }*/
+        }
 
         if (kDown & HidNpadButton_B) {
             if (!isWarningOnScreen) {
@@ -118,7 +116,7 @@ void Menu_StartChoosing() {
             }
         }
 
-        if (kDown & HidNpadButton_Up) {
+        if (kDown & HidNpadButton_Up || kDown & HidNpadButton_StickRUp) {
             if (choosenIndex != 0 && !isWarningOnScreen) {
                 choosenIndex--;
             } else if (choosenIndex == 0) {
@@ -126,7 +124,7 @@ void Menu_StartChoosing() {
             }
         }
 
-        if (kDown & HidNpadButton_Down) {
+        if (kDown & HidNpadButton_Down || kDown & HidNpadButton_StickRDown) {
             if (choosenIndex == amountOfFiles-1) {
                 choosenIndex = 0;
             } else if (choosenIndex < amountOfFiles-1 && !isWarningOnScreen) {
@@ -134,7 +132,7 @@ void Menu_StartChoosing() {
             }
         }
 
-        if (kDown & HidNpadButton_Minus) {
+        if (kUp & HidNpadButton_Minus) {
             configDarkMode = !configDarkMode;
         }
 

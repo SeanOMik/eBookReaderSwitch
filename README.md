@@ -6,11 +6,12 @@
 * Dark and light mode
 * Landscape reading view
 * Portrait reading view
+* Touch screen controls
+	* Touch the botton/top of the screen to zoom in/out and left and right to change the page.
 
 ### TODO:
 * Do some extra testing on file compatibility.
 * 2 pages side by side in landscape.
-* Touch screen for going to next page.
 * Hardware lock to prevent accidental touches (maybe Vol- ?) (?).
 * Save orientation, and dark mode settings.
 
@@ -45,7 +46,7 @@ Light Mode Landscape Reading:
 * NX-Shell Team - A good amount of the code is from an old version of their application.
 
 ### Building
-* Release built with [libnx release v.4.1.3](https://github.com/switchbrew/libnx).
+* Release built with [libnx release v4.1.3](https://github.com/switchbrew/libnx).
 * Uses `freetype` and other libs which comes with `switch-portlibs` via `devkitPro pacman`:
 ```
 pacman -S libnx switch-portlibs
@@ -57,7 +58,7 @@ make
 ```
 to build.
 
-If you don't have twili debugger installed then delete the -ltwili flag on the Makefile to compile:
+If you don't have twili debugger installed, delete the `-ltwili` flag on the Makefile to compile:
 ```
 LIBS: -ltwili
 ```
