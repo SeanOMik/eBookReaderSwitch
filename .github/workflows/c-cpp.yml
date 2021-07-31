@@ -1,0 +1,30 @@
+name: eBookReaderSwitch CI pipeline
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    container: devkitpro/devkita64:latest
+
+    steps:
+    - run: apt update && apt -y install libfreetype6-dev tree
+    - uses: actions/checkout@v1
+    - name: Update repo.
+      run: |
+        git submodule update --init --recursive
+        
+    - name: Building eBookReaderSwitch
+      run: |
+        export NODEBUG=true
+        make mupdf && make -j$(nproc)
+        
+    - uses: actions/upload-artifact@master
+      with:
+        name: eBookReaderSwitch
+        path: eBookReaderSwitch.nro
