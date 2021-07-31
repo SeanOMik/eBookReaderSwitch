@@ -13,7 +13,7 @@ jobs:
     container: devkitpro/devkita64:latest
 
     steps:
-    - run: apt update && apt -y install libfreetype6-dev tree
+    - run: apt update && apt -y install libfreetype6-dev
     - uses: actions/checkout@v1
     - name: Update repo.
       run: |
