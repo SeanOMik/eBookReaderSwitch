@@ -15,9 +15,14 @@ jobs:
     steps:
     - run: apt update && apt -y install libfreetype6-dev
     - uses: actions/checkout@v1
-    - name: Update repo.
+    - name: Get repo submoduels
       run: |
         git submodule update --init --recursive
+    - name: Cache MuPDF
+      uses: actions/cache@v2
+      with:
+        path: mupdf/build
+        key: ${{ runner.os }}-mupdf-${{ hashFiles('**/mupdf/PKGBUILD') }}
         
     - name: Building eBookReaderSwitch
       run: |
