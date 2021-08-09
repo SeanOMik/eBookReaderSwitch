@@ -8,6 +8,7 @@
 * Portrait reading view
 * Touch screen controls
 	* Touch the botton/top of the screen to zoom in/out and left and right to change the page.
+* Books read from `/switch/eBookReader/books`
 
 ### TODO:
 * Do some extra testing on file compatibility.
